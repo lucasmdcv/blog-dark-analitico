@@ -46,6 +46,26 @@ body {
     border-radius: 8px; /* Cantos levemente arredondados para estética moderna */
 }
 
+/* Container da imagem para manter o enquadramento */
+.news-card img {
+    width: 100%;            /* Ocupa toda a largura do card */
+    height: 400px;         /* Altura fixa para manter o padrão visual */
+    object-fit: cover;     /* Enquadra a imagem sem esticar (estilo Netflix) */
+    object-position: center; /* Foca no centro da imagem */
+    border-radius: 8px;    /* Mantém os cantos arredondados */
+    border: 1px solid #333; /* Borda sutil para separar do fundo dark */
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Responsividade para telas menores (Celulares) */
+@media (max-width: 600px) {
+    .news-card img {
+        height: 250px; /* Diminui a altura em telas pequenas */
+    }
+}
+
+
 .cat-tag {
     color: var(--primary);
     font-size: 0.75rem;
