@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"Desvendando a Magia do Rollback: Como o Netcode de Street Fighter 6 Dominou a Latência com Predição de Dados Avançada\"",
+        "resumo": "Resumo:\nA latência física é um inimigo eterno na era da jogabilidade online, mas os desenvolvedores da Capcom não se deixaram intimidar. O Netcode de Street Fighter 6 revolucionou a indústria com o seu sistema de rollback, que utiliza predição de dados em tempo real para minimizar a latência e garantir uma experiência de jogo impecável. Em um mergulho profundo na matemática por trás do Netcode, descubra",
+        "imagem": "images/img_1768031796.jpg",
+        "data_hora": "10/01/2026 às 04:56",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Sombra das 3h: Desvendando os Bugs que Só se Manifestam Quando o Café Acaba\"",
         "resumo": "Resumo:\nÀs 3h da manhã, o código parece adquirir uma vida própria. É um momento em que os bugs mais soturnos e inexplicáveis se manifestam, como se estivessem aguardando a oportunidade certa para contaminar o nosso código. Chame-os de \"monstros da madrugada\" ou \"spawn de 3h\", esses bugs são capazes de produzir erros inexplicáveis e comportamentos estranhos que só podem ser desvendados com um",
         "imagem": "img_1768030067.jpg",
