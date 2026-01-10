@@ -12,7 +12,7 @@
         "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Sombra das 3h: Desvendando os Bugs que Só se Manifestam Quando o Café Acaba\"",
         "resumo": "Resumo:\nÀs 3h da manhã, o código parece adquirir uma vida própria. É um momento em que os bugs mais soturnos e inexplicáveis se manifestam, como se estivessem aguardando a oportunidade certa para contaminar o nosso código. Chame-os de \"monstros da madrugada\" ou \"spawn de 3h\", esses bugs são capazes de produzir erros inexplicáveis e comportamentos estranhos que só podem ser desvendados com um",
-        "imagem": "img_1768030067.jpg",
+        "imagem": "images/img_1768030067.jpg",
         "data_hora": "10/01/2026 às 04:27",
         "autor": "Lucas Mendes",
         "local": "Ceilândia/DF"
@@ -21,7 +21,7 @@
         "categoria": "ALERT",
         "titulo": "\"O Homem Invisível: Desvendando a Complexidade do Ricochet para Call of Duty\"",
         "resumo": "Resumo:\n\"Imagine um sistema que monitora cada movimento do seu processador, analisa cada frame da sua gráfica e rastreia cada conexão da sua rede em tempo real. Isso é o Ricochet, o anti-cheat do Call of Duty que não para de vigiar. Com uma complexidade técnica impressionante, o Ricochet utiliza técnicas de engenharia reversa para identificar e prevenir comportamentos suspeitos em tempo real. Com acesso completo ao seu sistema, o Ricochet monitora memória, CPU e GPU, detectando qualquer",
-        "imagem": "img_1768029719.jpg",
+        "imagem": "images/img_1768029719.jpg",
         "data_hora": "10/01/2026 às 04:21",
         "autor": "Lucas Mendes",
         "local": "Ceilândia/DF"
@@ -30,7 +30,7 @@
         "categoria": "ALERT",
         "titulo": "\"Sprint de Segurança: Como a Telemetria da F-1 Corre com Dados Protegidos em Alta Velocidade\"",
         "resumo": "Resumo Nerd Impactante:\n\"A Fórmula 1 é um mundo de alta velocidade, onde os carros podem alcançar até 370 km/h e a segurança dos dados é crucial. Mas, você sabia que a telemetria da F-1 é protegida contra ataques cibernéticos com tecnologias avançadas de criptografia, autenticação e monitoramento em tempo real? Neste artigo, vamos mergulhar na análise das medidas seguras que permitem que a",
-        "imagem": "img_1768029332.jpg",
+        "imagem": "images/img_1768029332.jpg",
         "data_hora": "10/01/2026 às 04:15",
         "autor": "Lucas Mendes",
         "local": "Ceilândia/DF"
@@ -39,7 +39,7 @@
         "categoria": "IA_ANALYSIS",
         "titulo": "Radar: \"o",
         "resumo": "**Título:** O Botão Secreto do Google Chrome que Está Drenando Sua Bateria\n\n**Resumo Nerd Impactante:**\n\n\"Descubra o botão maldito do Google Chrome que está esvaziando sua bateria em apenas alguns cliques! O 'botão de pesquisa de endereços' está ativado por padrão e está consumindo recursos em excesso, afetando a autonomia do seu dispositivo. Desative-o agora mesmo e salve sua bateria. Aqui está o passo a passo para desativar o botão e recuperar sua autonomia.\"\n\nNota: O suposto botão de pesquisa de endereços que está drenando",
-        "imagem": "img_1768028691.jpg",
+        "imagem": "images/img_1768028691.jpg",
         "tempo": "Agora",
         "local": "Ceilândia/DF"
     },
@@ -47,7 +47,7 @@
         "categoria": "IA_ANALYSIS",
         "titulo": "Radar: \"o",
         "resumo": "**Título:** \"O Golpe da Nota Fiscal Exposta\"\n\n**Resumo nerd impactante:**\n\n\"Você está sendo roubado a cada compra no mercado. O golpe da nota fiscal é um esquema de fraude que está oculto sob o radar da economia brasileira, onde os empresários inflam valores de nota fiscal para aumentar seus lucros, deixando você com a conta de 30% a mais do que o valor real da mercadoria. Descubra como funciona e como parar esse golpe agora mesmo.\"",
-        "imagem": "img_1768028394.jpg",
+        "imagem": "images/img_1768028394.jpg",
         "tempo": "Agora",
         "local": "Ceilândia/DF"
     },
@@ -55,7 +55,7 @@
         "categoria": "IA_ANALYSIS",
         "titulo": "Radar: \"o",
         "resumo": "**Título:** \"A Mãos de Deus: Como sua Webcam é Usada para Espiar\"\n\n**Resumo:** \"Você acha que sua privacidade é segura? Pense novamente. A perícia digital revela como hackers e agências governamentais podem usar suas webcams para capturar imagens e vídeos sem seu conhecimento. Desde o caso de Aaron Schwartz até os recentes escândalos de espionagem, descubra como sua própria tecnologia pode estar te observando e como a perícia digital pode descobrir seus segredos mais sombrios.\"",
-        "imagem": "img_1768028266.jpg",
+        "imagem": "images/img_1768028266.jpg",
         "tempo": "Agora",
         "local": "Ceilândia/DF"
     },
@@ -71,7 +71,7 @@
         "categoria": "IA_ANALYSIS",
         "titulo": "Radar: \"uma",
         "resumo": "**Título:** \"Cidade Vigilante\"\n\n**Resumo:** \"Em um futuro próximo, uma inteligência artificial omnipotente, denominada 'Síndrome', monitora a cidade de Nova Troya, capturando cada detalhe de sua população. Enquanto os habitantes dormem, Síndrome guarda segredos e prediz crimes, forçando seu operador humano, um ex-agente de inteligência, a tomar decisões difíceis para proteger a cidade e seus habitantes. Mas quando os alvos de Síndrome começam a questionar sua existência, a linha entre vigilância e controle começa a se desenhar, levando a",
-        "imagem": "img_1768027388.jpg",
+        "imagem": "images/img_1768027388.jpg",
         "tempo": "Agora",
         "local": "Ceilândia/DF"
     },
