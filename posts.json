@@ -1,0 +1,51 @@
+[
+    {
+        "categoria": "FILMES",
+        "titulo": "ultima luta de jinwoo sun e beru ",
+        "resumo": "uma luta incrivel que aconteceu com eles ",
+        "tempo": "Agora",
+        "local": "Brasília/DF"
+    },
+    {
+        "categoria": "EXCLUSIVO",
+        "titulo": "Jim Caviezel em Dark Horse: Tudo o que sabemos sobre o thriller de 2026",
+        "resumo": "O astro de Person of Interest assume papel polêmico em produção que mistura política e drama. Filmado entre Brasil e EUA, longa promete quebrar recordes.",
+        "tempo": "Destaque",
+        "local": "Brasília"
+    },
+    {
+        "categoria": "GAMES",
+        "titulo": "Solo Leveling: Arise recebe nova atualização massiva com S-Rank Hunters",
+        "resumo": "O novo patch foca na evolução de Sung Jin-woo e traz novos sistemas de sombras que desafiam até os jogadores de nível ADS.",
+        "tempo": "Há 5 min",
+        "local": "Coreia do Sul"
+    },
+    {
+        "categoria": "SÉRIES",
+        "titulo": "The Boys Temporada Final: Vazamentos apontam destino cruel para os Sete",
+        "resumo": "Novas imagens de bastidores sugerem um confronto épico que fechará a trama de Billy Butcher de forma sangrenta e analítica.",
+        "tempo": "Há 15 min",
+        "local": "EUA"
+    },
+    {
+        "categoria": "FILMES",
+        "titulo": "Harry Potter: Nova série da HBO confirma início das gravações",
+        "resumo": "A produção que reinicia o universo de Hogwarts promete ser mais fiel aos livros e focar nos detalhes que os fãs geeks sempre pediram.",
+        "tempo": "Há 1 hora",
+        "local": "Londres"
+    },
+    {
+        "categoria": "CYBERSECURITY",
+        "titulo": "Alerta de Zero-Day: Vulnerabilidade em servidores Linux exige patch imediato",
+        "resumo": "Especialistas recomendam atualização do kernel após detecção de brecha que permite escalada de privilégios. Fique atento no seu Kali.",
+        "tempo": "Há 2 horas",
+        "local": "Mundo"
+    },
+    {
+        "categoria": "INVESTIMENTOS",
+        "titulo": "MXRF11 mantém estabilidade e atrai novos investidores em Janeiro",
+        "resumo": "Com cotação próxima aos R$ 10,15, o fundo imobiliário continua sendo a porta de entrada favorita para dividendos mensais.",
+        "tempo": "Hoje",
+        "local": "B3"
+    }
+]

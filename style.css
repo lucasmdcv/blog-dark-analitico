@@ -1,0 +1,99 @@
+:root {
+    --primary: #c4170c; /* Vermelho G1 */
+    --dark: #111111;
+    --border: #eeeeee;
+}
+
+body {
+    background-color: #ffffff;
+    color: var(--dark);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Centralizada */
+.navbar {
+    background-color: #000;
+    border-bottom: 4px solid var(--primary);
+    padding: 1.5rem 0;
+}
+
+.navbar .container {
+    flex-direction: column;
+    text-align: center;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    letter-spacing: -1px;
+    font-size: 2rem;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+/* Layout de Conteúdo */
+.main-content {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 15px;
+}
+
+/* Cards de Notícia */
+.news-card {
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+}
+
+.news-card:last-child {
+    border-bottom: none;
+}
+
+.cat-tag {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.news-title {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--dark);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.news-title:hover {
+    color: var(--primary);
+}
+
+.news-excerpt {
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.news-meta {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #999;
+    font-weight: 600;
+}
+
+/* Badge de Live */
+#live-badge {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink { 
+    0%, 100% { opacity: 1; } 
+    50% { opacity: 0.3; } 
+}
