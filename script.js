@@ -9,12 +9,12 @@ function startClock() {
 async function fetchNews() {
   const feed = document.getElementById("news-feed");
   try {
-    const response = await fetch("posts.json?v=" + Date.now());
+    const response = await fetch("post.json?v=" + Date.now());
     if (!response.ok) throw new Error("Falha no JSON");
-    const posts = await response.json();
+    const post = await response.json();
 
     // Localize onde o HTML é montado no seu script.js e adicione a tag <img>
-    feed.innerHTML = posts
+    feed.innerHTML = post
       .map(
         (post) => `
     <article class="news-card">
