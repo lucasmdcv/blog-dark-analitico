@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -37,36 +38,97 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _temaController = TextEditingController();
 
-  // Variáveis de Controle Analítico
   String _deployStatus = "IDLE";
   Color _statusColor = Colors.orangeAccent;
+  double _progressoTransmissao = 0.0;
+  Timer? _progressoTimer;
 
-  // Dados de Conexão (Puxando do .env no momento certo)
   late String githubToken;
-  final String repoOwner = "lucasmdcv"; // Seu usuário GitHub
+  final String repoOwner = "lucasmdcv";
   final String repoName = "blog-dark-analitico";
 
-  // Lista de Logs (Simulada)
-  final List<Map<String, String>> _logs = [
-    {"hash": "35da94a", "msg": "Novo post via script automatizado", "data": "10/01 13:52"},
-    {"hash": "a2b4c1d", "msg": "Ajuste no motor de IA", "data": "10/01 12:30"},
+  final List<Map<String, String>> _logs = [];
+
+  final List<String> _temasAleatorios = [
+    "Protocolos de Shadow IT: Como identificar dispositivos fantasmas na rede",
+    "Engenharia Reversa em Python: Desmontando scripts de automação maliciosos",
+    "A estética de vigilância de Person of Interest: Realidade ou ficção em 2026?",
+    "Otimização de rotinas Java para processamento massivo de logs analíticos",
+    "Cybersecurity no DF: Vulnerabilidades comuns em infraestruturas locais",
+    "Análise forense digital: Seguindo o rastro de dados como um Dexter de sistemas",
+    "Automatizando Pentests com Selenium e Python: O futuro do QA agressivo",
+    "A lógica de Solo Leveling: Como 'subir de nível' em arquitetura de dados",
+    "Monitoramento em tempo real: Criando dashboards que Finch (PoI) aprovaria",
+    "Segurança em IoT: Por que sua impressora 3D Neptune pode ser uma brecha",
   ];
 
   @override
   void initState() {
     super.initState();
-    // Inicializa o token após o carregamento do Main
     githubToken = dotenv.env['GITHUB_TOKEN'] ?? "";
+    _buscarDadosReais();
   }
 
-  // Função para disparar a automação via API do GitHub
+  void _iniciarBarraProgresso() {
+    _progressoTimer?.cancel();
+    setState(() => _progressoTransmissao = 0.0);
+    _progressoTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_progressoTransmissao < 0.95) {
+          _progressoTransmissao += 1 / 60;
+        } else {
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  Future<void> _buscarDadosReais() async {
+    setState(() {
+      _deployStatus = "SYNCING...";
+      _statusColor = Colors.blueAccent;
+    });
+
+    final url = Uri.parse(
+      'https://raw.githubusercontent.com/$repoOwner/$repoName/main/post.json?t=${DateTime.now().millisecondsSinceEpoch}',
+    );
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> dados = jsonDecode(response.body);
+        setState(() {
+          _logs.clear();
+          for (var item in dados) {
+            _logs.add({
+              "hash": "SYSTEM",
+              "msg": item['titulo'] ?? "Sem título",
+              "data": "ONLINE",
+            });
+          }
+          _deployStatus = "SYNCED";
+          _statusColor = Colors.greenAccent;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _deployStatus = "OFFLINE";
+        _statusColor = Colors.redAccent;
+      });
+    }
+  }
+
   Future<void> _dispararExecucao(String tema) async {
     setState(() {
       _deployStatus = "TRANSMITINDO...";
       _statusColor = Colors.blueAccent;
     });
 
-    final url = Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/actions/workflows/postar.yml/dispatches');
+    _iniciarBarraProgresso();
+
+    final url = Uri.parse(
+      'https://api.github.com/repos/$repoOwner/$repoName/actions/workflows/postar.yml/dispatches',
+    );
 
     try {
       final response = await http.post(
@@ -77,25 +139,38 @@ class _DashboardState extends State<Dashboard> {
         },
         body: jsonEncode({
           'ref': 'main',
-          'inputs': {'tema': tema}
+          'inputs': {'tema': tema},
         }),
       );
 
       if (response.statusCode == 204) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Protocolo aceito pelo GitHub (Status 204)"),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
         setState(() {
           _deployStatus = "SUCCESS (GH)";
           _statusColor = Colors.greenAccent;
-          _logs.insert(0, {"hash": "transm", "msg": "SYSTEM_ROOT: $tema", "data": "Agora"});
+          _logs.insert(0, {
+            "hash": "transm",
+            "msg": "SYSTEM_ROOT: $tema",
+            "data": "Processando...",
+          });
         });
+        _temaController.clear();
       } else {
         setState(() {
-          _deployStatus = "ERR: ${response.statusCode}";
+          _deployStatus = "ERRO: ${response.statusCode}";
           _statusColor = Colors.redAccent;
         });
       }
     } catch (e) {
       setState(() {
-        _deployStatus = "OFFLINE";
+        _deployStatus = "OFFLINE/TIMEOUT";
         _statusColor = Colors.redAccent;
       });
     }
@@ -116,7 +191,7 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.black,
         actions: [
           IconButton(
-            onPressed: () => setState(() {}),
+            onPressed: _buscarDadosReais,
             icon: const Icon(Icons.refresh, color: Colors.cyanAccent),
           ),
         ],
@@ -126,7 +201,6 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SEÇÃO: INPUT DE TEMA
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -140,10 +214,7 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: _temaController,
-                    decoration: const InputDecoration(
-                      hintText: "Ex: Série You Netflix...",
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: const InputDecoration(hintText: "Ex: Série You Netflix...", border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
@@ -153,18 +224,38 @@ class _DashboardState extends State<Dashboard> {
                       minimumSize: const Size(double.infinity, 45),
                     ),
                     onPressed: () {
-                      if (_temaController.text.isNotEmpty) {
-                        _dispararExecucao(_temaController.text);
+                      String tema = _temaController.text;
+                      if (tema.isEmpty) {
+                        _temasAleatorios.shuffle();
+                        tema = _temasAleatorios.first;
                       }
+                      _dispararExecucao(tema);
                     },
                     icon: const Icon(Icons.bolt),
                     label: const Text("EXECUTAR: NOVO BLOG"),
                   ),
+                  if (_deployStatus == "TRANSMITINDO...") 
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Column(
+                        children: [
+                          LinearProgressIndicator(
+                            value: _progressoTransmissao,
+                            backgroundColor: Colors.white10,
+                            color: Colors.cyanAccent,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            "${(_progressoTransmissao * 100).toStringAsFixed(0)}% DA OPERAÇÃO CONCLUÍDA",
+                            style: const TextStyle(color: Colors.cyanAccent, fontSize: 10, fontFamily: 'monospace'),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
             const SizedBox(height: 15),
-            // SEÇÃO: STATUS ANALÍTICO
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
@@ -184,12 +275,8 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             const SizedBox(height: 20),
-            // BOTÃO ACESSAR SITE
             OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.grey),
-                minimumSize: const Size(double.infinity, 45),
-              ),
+              style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey), minimumSize: const Size(double.infinity, 45)),
               onPressed: _abrirSite,
               icon: const Icon(Icons.language),
               label: const Text("ACESSAR TERMINAL WEB (SITE)"),
@@ -197,7 +284,6 @@ class _DashboardState extends State<Dashboard> {
             const SizedBox(height: 20),
             const Text("TRANSMISSÕES RECENTES (LOGS):", style: TextStyle(color: Colors.greenAccent, fontSize: 12)),
             const SizedBox(height: 10),
-            // LISTA DE LOGS (HISTÓRICO)
             Expanded(
               child: ListView.builder(
                 itemCount: _logs.length,
@@ -232,5 +318,11 @@ class _DashboardState extends State<Dashboard> {
         Text(status, style: TextStyle(fontSize: 10, fontFamily: 'monospace', color: statusColor, fontWeight: FontWeight.bold)),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _progressoTimer?.cancel();
+    super.dispose();
   }
 }
