@@ -5,10 +5,13 @@ on:
       tema:
         description: 'Tema do post'
         required: true
+        default: 'Cybersecurity'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Executar Script Python
-        run: echo "Recebido tema: ${{ github.event.inputs.tema }}"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Log
+        run: echo "Disparado via Flutter para o tema ${{ github.event.inputs.tema }}"
