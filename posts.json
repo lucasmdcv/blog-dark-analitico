@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "A Era do Big Data e IA: Uma Revolução em Marcha",
+        "resumo": "Resumo: Nossa era está sendo redesenhada pelo Big Data e Inteligência Artificial. Com a capacidade de processar e analisar volumes enormes de dados, as máquinas estão aprendendo a fazer o que nunca foi possível antes. Deles, são extraídas novas informações e conhecimentos inéditos que revolucionam a forma como vivemos e trabalhamos. A IA está sendo empregada em áreas como saúde, educação, segurança e economia, trazendo benefícios como a melhoria da qualidade de vida, a criatividade e a resolução de",
+        "imagem": "images/img_1768034394.jpg",
+        "data_hora": "10/01/2026 às 05:39",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Armadilha da Análise de Metadados: Como Dexter Morgan foi Capturado em 2026\"",
         "resumo": "Resumo:\nEm um futuro não muito distante, em 2026, a análise de metadados havia evoluído a um nível de precisão quase perfeita. Com a ajuda de inteligência artificial avançada e algoritmos complexos, os especialistas em segurança foram capazes de identificar e capturar até os criminosos mais sábios, como o Dr. Dexter Morgan, o antigo serial killer de Miami.\nUtilizando a análise de metadados, os investigadores conseguiram mapear",
         "imagem": "images/img_1768034216.jpg",
