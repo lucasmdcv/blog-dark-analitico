@@ -20,12 +20,7 @@ async function fetchNews() {
     <article class="news-card">
         <span class="cat-tag">${post.categoria}</span>
         
-       ${
-         post.imagem
-           ? `<img src="${post.imagem}" class="img-fluid rounded mb-4">`
-           : ""
-       }
-
+       ${post.imagem ? `<img src="${post.imagem}" alt="Thumbnail do Post">` : ''}
       
     
         <a href="#" class="news-title">${post.titulo}</a>
