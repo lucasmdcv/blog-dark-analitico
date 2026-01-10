@@ -42,8 +42,10 @@ class _DashboardState extends State<Dashboard> {
   String _deployStatus = "IDLE";
   Color _statusColor = Colors.orangeAccent;
   double _progressoTransmissao = 0.0;
-  int _segundosDecorridos = 0; // LOCAL CORRETO: Dentro do State
+  int _segundosDecorridos = 0;
+  int? _tempoFinalProcessamento; // Tempo real de resposta do GitHub
   Timer? _progressoTimer;
+  Timer? _statusCheckTimer; // Sonda de verificação da API
 
   late String githubToken;
   final String repoOwner = "lucasmdcv";
@@ -71,11 +73,47 @@ class _DashboardState extends State<Dashboard> {
     _buscarDadosReais();
   }
 
+  // Sonda que pergunta ao GitHub se a Action terminou
+  Future<void> _verificarStatusAction() async {
+    final url = Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/actions/runs?per_page=1');
+    
+    _statusCheckTimer?.cancel();
+    _statusCheckTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      try {
+        final response = await http.get(url, headers: {
+          'Authorization': 'Bearer $githubToken',
+          'Accept': 'application/vnd.github+json',
+        });
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          final lastRun = data['workflow_runs'][0];
+          String status = lastRun['status']; // 'queued', 'in_progress', 'completed'
+          String conclusion = lastRun['conclusion'] ?? ""; // 'success', 'failure'
+
+          if (status == "completed") {
+            timer.cancel();
+            _progressoTimer?.cancel(); // Para o cronômetro visual
+            setState(() {
+              _tempoFinalProcessamento = _segundosDecorridos;
+              _deployStatus = conclusion == "success" ? "CONCLUÍDO" : "FALHA GH";
+              _statusColor = conclusion == "success" ? Colors.greenAccent : Colors.redAccent;
+            });
+            _buscarDadosReais(); // Sincroniza os logs logo após o término
+          }
+        }
+      } catch (e) {
+        timer.cancel();
+      }
+    });
+  }
+
   void _iniciarBarraProgresso() {
     _progressoTimer?.cancel();
     setState(() {
       _progressoTransmissao = 0.0;
       _segundosDecorridos = 0;
+      _tempoFinalProcessamento = null;
     });
 
     _progressoTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -84,18 +122,13 @@ class _DashboardState extends State<Dashboard> {
         if (_progressoTransmissao < 0.95) {
           _progressoTransmissao += 1 / 60;
         } else {
-          timer.cancel();
+          // Barra fica em 95% até o GitHub avisar que acabou
         }
       });
     });
   }
 
   Future<void> _buscarDadosReais() async {
-    setState(() {
-      _deployStatus = "SYNCING...";
-      _statusColor = Colors.blueAccent;
-    });
-
     final url = Uri.parse(
       'https://raw.githubusercontent.com/$repoOwner/$repoName/main/post.json?t=${DateTime.now().millisecondsSinceEpoch}',
     );
@@ -113,15 +146,10 @@ class _DashboardState extends State<Dashboard> {
               "data": "ONLINE",
             });
           }
-          _deployStatus = "SYNCED";
-          _statusColor = Colors.greenAccent;
         });
       }
     } catch (e) {
-      setState(() {
-        _deployStatus = "OFFLINE";
-        _statusColor = Colors.redAccent;
-      });
+      debugPrint("Erro ao buscar dados: $e");
     }
   }
 
@@ -151,6 +179,7 @@ class _DashboardState extends State<Dashboard> {
       );
 
       if (response.statusCode == 204) {
+        _verificarStatusAction(); // INICIA O MONITORAMENTO REAL
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -159,16 +188,11 @@ class _DashboardState extends State<Dashboard> {
             ),
           );
         }
+      } else {
         setState(() {
-          _deployStatus = "SUCCESS (GH)";
-          _statusColor = Colors.greenAccent;
-          _logs.insert(0, {
-            "hash": "transm",
-            "msg": "SYSTEM_ROOT: $tema",
-            "data": "Processando...",
-          });
+          _deployStatus = "ERRO: ${response.statusCode}";
+          _statusColor = Colors.redAccent;
         });
-        _temaController.clear();
       }
     } catch (e) {
       setState(() {
@@ -237,8 +261,7 @@ class _DashboardState extends State<Dashboard> {
                     label: const Text("EXECUTAR: NOVO BLOG"),
                   ),
                   
-                  // BARRA DE PROGRESSO COM CRONÔMETRO (LAYOUT LADO A LADO)
-                  if (_deployStatus == "TRANSMITINDO...")
+                  if (_deployStatus == "TRANSMITINDO..." || _tempoFinalProcessamento != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Column(
@@ -246,16 +269,18 @@ class _DashboardState extends State<Dashboard> {
                           LinearProgressIndicator(
                             value: _progressoTransmissao,
                             backgroundColor: Colors.white10,
-                            color: Colors.cyanAccent,
+                            color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
                           ),
                           const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "TEMPO: ${_segundosDecorridos}s / 60s",
-                                style: const TextStyle(
-                                  color: Colors.cyanAccent,
+                                _tempoFinalProcessamento == null 
+                                    ? "TEMPO: ${_segundosDecorridos}s" 
+                                    : "TEMPO TOTAL GH: ${_tempoFinalProcessamento}s",
+                                style: TextStyle(
+                                  color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
                                   fontSize: 10,
                                   fontFamily: 'monospace',
                                   fontWeight: FontWeight.bold,
@@ -263,11 +288,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               Text(
                                 "${(_progressoTransmissao * 100).toStringAsFixed(0)}% CONCLUÍDO",
-                                style: const TextStyle(
-                                  color: Colors.cyanAccent,
-                                  fontSize: 10,
-                                  fontFamily: 'monospace',
-                                ),
+                                style: const TextStyle(color: Colors.cyanAccent, fontSize: 10, fontFamily: 'monospace'),
                               ),
                             ],
                           ),
@@ -289,19 +310,9 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   _buildStatusRow("MOTOR IA (LLAMA-3)", "OPERACIONAL", Colors.greenAccent),
                   const SizedBox(height: 5),
-                  _buildStatusRow("CONEXÃO GITHUB", githubToken.isNotEmpty ? "ONLINE" : "MISSING TOKEN",
-                      githubToken.isNotEmpty ? Colors.greenAccent : Colors.redAccent),
-                  const SizedBox(height: 5),
-                  _buildStatusRow("DEPLOY NETLIFY", _deployStatus, _statusColor),
+                  _buildStatusRow("GITHUB ACTION", _deployStatus, _statusColor),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey), minimumSize: const Size(double.infinity, 45)),
-              onPressed: _abrirSite,
-              icon: const Icon(Icons.language),
-              label: const Text("ACESSAR TERMINAL WEB (SITE)"),
             ),
             const SizedBox(height: 20),
             const Text("TRANSMISSÕES RECENTES (LOGS):", style: TextStyle(color: Colors.greenAccent, fontSize: 12)),
@@ -345,6 +356,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void dispose() {
     _progressoTimer?.cancel();
+    _statusCheckTimer?.cancel();
     _temaController.dispose();
     super.dispose();
   }
