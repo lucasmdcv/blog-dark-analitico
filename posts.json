@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"O Salto Informativo: Uma Análise das Transformações do Hardware e Firmware na Era Digital\"",
+        "resumo": "Resumo:\n\"Desde a invenção do primeiro computador, a evolução do hardware e firmware tem sido um processo contínuo e acelerado. A transição de máquinas de relés a processadores de silício, e da memória magnética a memória de estado sólido, representou um salto revolucionário na capacidade computacional e na eficiência dos sistemas informáticos.\nO advento da era digital trouxe inovações como a arquitetura de CPU RISC, a introdução do processamento paralelo",
+        "imagem": "images/img_1768055433.jpg",
+        "data_hora": "10/01/2026 às 11:30",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"Revoluindo o Desenvolvimento Mobile: O Futuro de Flutter e IA\"",
         "resumo": "Resumo:\n\"A era de desenvolvimento mobile está prestes a sofrer uma revolução sem precedentes com a combinação de Flutter e inteligência artificial (IA). A tecnologia Flutter, criada pela Google, oferece uma plataforma de desenvolvimento unificada para aplicativos móveis, permitindo que os desenvolvedores criem experiências de usuário inovadoras e rápidas. Juntamente com a integração de IA, os aplicativos móveis poderão se tornar ainda mais pessoais, intuitivos e eficientes. Com a capacidade de aprender e melhorar",
         "imagem": "images/img_1768034493.jpg",
