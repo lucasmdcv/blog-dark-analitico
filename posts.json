@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"A Revolução no Gerenciamento de Redes: O Monitoramento Preditivo em Ação\"",
+        "resumo": "Resumo:\n\"Imagine uma rede que prevê e evita problemas antes de ocorrerem, garantindo uma experiência de usuário impecável e reduzindo significativamente os custos de manutenção. Isso é possível com o monitoramento preditivo de rede, uma tecnologia inovadora que utiliza inteligência artificial e aprendizado de máquina para analisar dados em tempo real e prever potenciais problemas antes de ocorrerem.\nCom o monitoramento preditivo, os administradores de rede podem identificar padrões de comportamento anômalo",
+        "imagem": "images/img_1768059025.jpg",
+        "data_hora": "10/01/2026 às 12:30",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Face Oculta da Realidade: Desvendando os Segredos da Deep Web\"",
         "resumo": "Resumo:\n\"Imagine um lugar onde a anonimidade é a única lei, onde a criptografia é a ferramenta de sobrevivência e onde a verdade é uma ilusão. Bem-vindo à Deep Web, o reino escondido da internet que escapa ao alcance da maioria. Neste território desconhecido, os sites de mercado negro, os fóruns de discussão clandestina e os servidores de armazenamento de dados sensíveis se misturam em uma teia complexa de segredos e mentiras. A",
         "imagem": "images/img_1768057115.jpg",
