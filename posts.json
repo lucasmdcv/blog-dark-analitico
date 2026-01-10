@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"Descodificando a Realidade: Uma Análise Crítica da Complexidade Cibernética\"",
+        "resumo": "Resumo:\n\"Imagine uma realidade onde a fronteira entre o físico e o digital se torna cada vez mais tênue. Uma realidade onde algoritmos inteligentes começam a tomar decisões que afetam a vida das pessoas. Nesta era cibernética, a complexidade e a incerteza se tornam a norma. Por meio de uma análise crítica da teoria dos sistemas complexos e da inteligência artificial, esta obra explora as implicações profundas dessas tecnologias em nossa compreensão do mundo. De como",
+        "imagem": "images/img_1768033096.jpg",
+        "data_hora": "10/01/2026 às 05:18",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"Desvendando a Magia do Rollback: Como o Netcode de Street Fighter 6 Dominou a Latência com Predição de Dados Avançada\"",
         "resumo": "Resumo:\nA latência física é um inimigo eterno na era da jogabilidade online, mas os desenvolvedores da Capcom não se deixaram intimidar. O Netcode de Street Fighter 6 revolucionou a indústria com o seu sistema de rollback, que utiliza predição de dados em tempo real para minimizar a latência e garantir uma experiência de jogo impecável. Em um mergulho profundo na matemática por trás do Netcode, descubra",
         "imagem": "images/img_1768031796.jpg",
