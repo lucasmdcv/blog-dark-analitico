@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"A Evolução da Guerra: Um Estudo Analítico da Série Call of Duty\"",
+        "resumo": "Resumo Nerd Impactante:\n\"Imagine um mundo onde a tecnologia militar avançada se mistura com a adrenalina de jogos de ação. Isso é o Call of Duty, uma série que revolucionou a indústria de jogos de tiro em primeira pessoa. Com uma história que se estende desde a Segunda Guerra Mundial até as guerras atuais, a série oferece uma experiência única de combate e estratégia.\nAo longo das décadas, o Call of Duty evoluiu para incluir gráficos",
+        "imagem": "images/img_1768068495.jpg",
+        "data_hora": "10/01/2026 às 15:08",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"Revolucionando a Experiência Móvel: O Futuro do Desenvolvimento com Flutter e IA\"",
         "resumo": "Resumo Nerd Impactante:\n\"Prepare-se para uma explosão de inovação! A combinação de Flutter e inteligência artificial (IA) está prestes a transformar a forma como desenvolvemos aplicativos móveis. Com a capacidade de criar interfaces de usuário personalizadas e dinâmicas, Flutter torna-se o framework ideal para a integração de IA em aplicativos móveis. Com IA, os aplicativos móveis não apenas interagem com os usuários, mas também aprendem com suas preferências e comportamentos, fornecendo experiências",
         "imagem": "images/img_1768068107.jpg",
