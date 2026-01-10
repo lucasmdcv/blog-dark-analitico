@@ -100,18 +100,18 @@ def gerar_e_subir():
         "local": "Ceilândia/DF"
     }
 
-    posts = []
-    if os.path.exists('posts.json'):
+    post = []
+    if os.path.exists('post.json'):
         try:
-            with open('posts.json', 'r', encoding='utf-8') as f:
-                posts = json.load(f)
+            with open('post.json', 'r', encoding='utf-8') as f:
+                post = json.load(f)
         except:
-            posts = []
+            post = []
 
-    posts.insert(0, novo_post)
+    post.insert(0, novo_post)
 
-    with open('posts.json', 'w', encoding='utf-8') as f:
-        json.dump(posts, f, indent=4, ensure_ascii=False)
+    with open('post.json', 'w', encoding='utf-8') as f:
+        json.dump(post, f, indent=4, ensure_ascii=False)
 
     print(f"\n[SUCESSO LOCAL] Post '{titulo_final}' salvo com sucesso!")
 
