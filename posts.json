@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"A Ameaça Encravada: Desvendando as Vulnerabilidades de Segurança em Sistemas de Impressão 3D\"",
+        "resumo": "Resumo Nerd Impactante:\n\"Os sistemas de impressão 3D, inicialmente projetados para revolucionar a fabricação, agora se tornam uma ameaça latente para a segurança cibernética. A integração de tecnologias avançadas, como IoT e Machine Learning, cria um ambiente perigoso para ataques cibernéticos. As vulnerabilidades em sistemas de impressão 3D podem ser exploradas por criminosos para implantar malware, roubar dados sensíveis e até mesmo criar disposit",
+        "imagem": "images/img_1768061114.jpg",
+        "data_hora": "10/01/2026 às 13:05",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"Desvendando a Anarquia da Memória: Uma Análise de Falhas de Memória em Sistemas de Computador\"",
         "resumo": "Resumo:\n\"A exploração de falhas de memória é uma área de pesquisa cada vez mais relevante em sistemas de computador, onde a estabilidade e a confiabilidade são fundamentais. Em um mundo onde o processamento de dados é cada vez mais complexo, as falhas de memória podem causar danos irreparáveis a sistemas críticos. Neste artigo, exploramos as causas e consequências de falhas de memória em sistemas de computador, destacando a importância de desenvolver técnicas de",
         "imagem": "images/img_1768060766.jpg",
