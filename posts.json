@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"Revolucionando a Experiência Móvel: O Futuro do Desenvolvimento com Flutter e IA\"",
+        "resumo": "Resumo Nerd Impactante:\n\"Prepare-se para uma explosão de inovação! A combinação de Flutter e inteligência artificial (IA) está prestes a transformar a forma como desenvolvemos aplicativos móveis. Com a capacidade de criar interfaces de usuário personalizadas e dinâmicas, Flutter torna-se o framework ideal para a integração de IA em aplicativos móveis. Com IA, os aplicativos móveis não apenas interagem com os usuários, mas também aprendem com suas preferências e comportamentos, fornecendo experiências",
+        "imagem": "images/img_1768068107.jpg",
+        "data_hora": "10/01/2026 às 15:01",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Sociedade Redes: Impacto das Redes Sociais nos Jovens em 2026 - Uma Análise Crítica do Futuro da Juventude Digital\"",
         "resumo": "Resumo:\nEm 2026, as redes sociais terão um impacto profundo e irreversível nos jovens, influenciando suas vidas em todos os níveis. Com uma análise crítica, este estudo examina como as redes sociais irão moldar a identidade, a sociedade e o futuro da juventude em uma era digital dominada por plataformas como o Metaverso. Nossa pesquisa sugere que as redes sociais irão:\n- Aument",
         "imagem": "images/img_1768067168.jpg",
