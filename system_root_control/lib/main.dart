@@ -38,9 +38,11 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _temaController = TextEditingController();
 
+  // Variáveis de Controle Analítico
   String _deployStatus = "IDLE";
   Color _statusColor = Colors.orangeAccent;
   double _progressoTransmissao = 0.0;
+  int _segundosDecorridos = 0; // LOCAL CORRETO: Dentro do State
   Timer? _progressoTimer;
 
   late String githubToken;
@@ -71,9 +73,14 @@ class _DashboardState extends State<Dashboard> {
 
   void _iniciarBarraProgresso() {
     _progressoTimer?.cancel();
-    setState(() => _progressoTransmissao = 0.0);
+    setState(() {
+      _progressoTransmissao = 0.0;
+      _segundosDecorridos = 0;
+    });
+
     _progressoTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
+        _segundosDecorridos++;
         if (_progressoTransmissao < 0.95) {
           _progressoTransmissao += 1 / 60;
         } else {
@@ -162,11 +169,6 @@ class _DashboardState extends State<Dashboard> {
           });
         });
         _temaController.clear();
-      } else {
-        setState(() {
-          _deployStatus = "ERRO: ${response.statusCode}";
-          _statusColor = Colors.redAccent;
-        });
       }
     } catch (e) {
       setState(() {
@@ -234,7 +236,9 @@ class _DashboardState extends State<Dashboard> {
                     icon: const Icon(Icons.bolt),
                     label: const Text("EXECUTAR: NOVO BLOG"),
                   ),
-                  if (_deployStatus == "TRANSMITINDO...") 
+                  
+                  // BARRA DE PROGRESSO COM CRONÔMETRO (LAYOUT LADO A LADO)
+                  if (_deployStatus == "TRANSMITINDO...")
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Column(
@@ -244,10 +248,28 @@ class _DashboardState extends State<Dashboard> {
                             backgroundColor: Colors.white10,
                             color: Colors.cyanAccent,
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "${(_progressoTransmissao * 100).toStringAsFixed(0)}% DA OPERAÇÃO CONCLUÍDA",
-                            style: const TextStyle(color: Colors.cyanAccent, fontSize: 10, fontFamily: 'monospace'),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "TEMPO: ${_segundosDecorridos}s / 60s",
+                                style: const TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontSize: 10,
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "${(_progressoTransmissao * 100).toStringAsFixed(0)}% CONCLUÍDO",
+                                style: const TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontSize: 10,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -323,6 +345,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void dispose() {
     _progressoTimer?.cancel();
+    _temaController.dispose();
     super.dispose();
   }
 }
