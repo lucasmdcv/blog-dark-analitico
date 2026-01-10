@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"A Sociedade Redes: Impacto das Redes Sociais nos Jovens em 2026 - Uma Análise Crítica do Futuro da Juventude Digital\"",
+        "resumo": "Resumo:\nEm 2026, as redes sociais terão um impacto profundo e irreversível nos jovens, influenciando suas vidas em todos os níveis. Com uma análise crítica, este estudo examina como as redes sociais irão moldar a identidade, a sociedade e o futuro da juventude em uma era digital dominada por plataformas como o Metaverso. Nossa pesquisa sugere que as redes sociais irão:\n- Aument",
+        "imagem": "images/img_1768067168.jpg",
+        "data_hora": "10/01/2026 às 14:46",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Proteção de Infraestrutura Crítica: Um Desafio de Segurança em Escala\"",
         "resumo": "Resumo:\nEm um mundo cada vez mais dependente de sistemas de infraestrutura crítica, a segurança desses servidores é uma questão de vida ou morte. As consequências de uma falha ou ataque a essas infraestruturas podem ser devastadoras, afetando não apenas a reputação de uma empresa, mas também a estabilidade global.\nCom a crescente adoção de tecnologias como o cloud computing e a internet das coisas (IoT), os servidores de infraestrutura crítica estão se tornando cada vez mais complexos e",
         "imagem": "images/img_1768066978.jpg",
