@@ -18,12 +18,14 @@ feed.innerHTML = posts.map(post => `
     <article class="news-card">
         <span class="cat-tag">${post.categoria}</span>
         
-        ${post.imagem ? `<img src="${post.imagem}" class="img-fluid rounded mb-3 shadow-sm" style="width:100%; max-height:400px; object-fit:cover;">` : ''}
+        ${post.imagem ? `<img src="${post.imagem}" class="img-fluid rounded mb-4 shadow" style="width:100%; max-height:450px; object-fit:cover;">` : ''}
         
         <a href="#" class="news-title">${post.titulo}</a>
         <p class="news-excerpt">${post.resumo}</p>
+        
         <div class="news-meta">
-            ${post.tempo.toUpperCase()} • EM ${post.local.toUpperCase()}
+            Postado em: ${post.data_hora} <br>
+            Por: <strong>${post.autor}</strong> • ${post.local}
         </div>
     </article>
 `).join('');

@@ -1,12 +1,14 @@
 :root {
-    --primary: #c4170c; /* Vermelho G1 */
-    --dark: #111111;
-    --border: #eeeeee;
+    --primary: #c4170c; /* Vermelho G1/Alerta */
+    --dark-bg: #0a0a0a; /* Fundo quase preto */
+    --card-bg: #111111; /* Fundo dos cards */
+    --text-main: #e0e0e0; /* Cinza claro para leitura */
+    --kali-green: #00ff41; /* Verde Matrix */
 }
 
 body {
-    background-color: #ffffff;
-    color: var(--dark);
+    background-color: var(--dark-bg); /* MUDANÇA: Agora o fundo é escuro */
+    color: var(--text-main);
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
@@ -19,17 +21,12 @@ body {
     padding: 1.5rem 0;
 }
 
-.navbar .container {
-    flex-direction: column;
-    text-align: center;
-}
-
 .navbar-brand {
+    font-family: 'Courier New', monospace; /* Fonte de terminal */
     font-weight: 900;
-    letter-spacing: -1px;
-    font-size: 2rem;
-    color: #fff !important;
-    text-decoration: none;
+    color: #00ff41 !important; /* Verde Matrix */
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* Layout de Conteúdo */
@@ -41,13 +38,12 @@ body {
 
 /* Cards de Notícia */
 .news-card {
-    border-bottom: 1px solid var(--border);
-    padding: 40px 0;
+    background-color: var(--card-bg);
+    border: 1px solid #222;
+    padding: 30px;
+    margin-bottom: 30px;
     text-align: center;
-}
-
-.news-card:last-child {
-    border-bottom: none;
+    border-radius: 8px; /* Cantos levemente arredondados para estética moderna */
 }
 
 .cat-tag {
@@ -60,37 +56,43 @@ body {
 }
 
 .news-title {
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--dark);
-    text-decoration: none;
+    color: #ffffff !important; /* Branco puro para brilhar no fundo escuro */
     display: block;
-    margin-bottom: 20px;
+    font-size: 2rem; /* Aumentei para o clickbait aparecer bem */
+    margin: 15px 0;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1.2;
 }
 
 .news-title:hover {
-    color: var(--primary);
+    color: var(--kali-green) !important; /* Efeito hover estilo Hacker */
 }
 
 .news-excerpt {
-    color: #555;
+    color: #b0b0b0; /* Cinza para o resumo não brigar com o título */
     font-size: 1.1rem;
     line-height: 1.6;
     max-width: 700px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
 }
 
 .news-meta {
-    margin-top: 20px;
     font-size: 0.85rem;
-    color: #999;
-    font-weight: 600;
+    color: #666;
+    border-top: 1px solid #222;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.news-meta strong {
+    color: var(--kali-green); /* Seu nome Lucas Mendes em verde Matrix */
 }
 
 /* Badge de Live */
 #live-badge {
     animation: blink 1.5s infinite;
+    color: var(--primary);
 }
 
 @keyframes blink { 
