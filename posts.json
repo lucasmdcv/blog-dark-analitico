@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"Revoluindo o Desenvolvimento Mobile: O Futuro de Flutter e IA\"",
+        "resumo": "Resumo:\n\"A era de desenvolvimento mobile está prestes a sofrer uma revolução sem precedentes com a combinação de Flutter e inteligência artificial (IA). A tecnologia Flutter, criada pela Google, oferece uma plataforma de desenvolvimento unificada para aplicativos móveis, permitindo que os desenvolvedores criem experiências de usuário inovadoras e rápidas. Juntamente com a integração de IA, os aplicativos móveis poderão se tornar ainda mais pessoais, intuitivos e eficientes. Com a capacidade de aprender e melhorar",
+        "imagem": "images/img_1768034493.jpg",
+        "data_hora": "10/01/2026 às 05:41",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "A Era do Big Data e IA: Uma Revolução em Marcha",
         "resumo": "Resumo: Nossa era está sendo redesenhada pelo Big Data e Inteligência Artificial. Com a capacidade de processar e analisar volumes enormes de dados, as máquinas estão aprendendo a fazer o que nunca foi possível antes. Deles, são extraídas novas informações e conhecimentos inéditos que revolucionam a forma como vivemos e trabalhamos. A IA está sendo empregada em áreas como saúde, educação, segurança e economia, trazendo benefícios como a melhoria da qualidade de vida, a criatividade e a resolução de",
         "imagem": "images/img_1768034394.jpg",
