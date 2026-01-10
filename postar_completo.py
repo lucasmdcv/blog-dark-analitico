@@ -1,9 +1,11 @@
 import os
 import json
 import time
-import random  # Import necessário para o sorteio
+import random
+import sys # <--- ADICIONADO: Para capturar o tema do Flutter
 from datetime import datetime
 from huggingface_hub import InferenceClient
+import requests
 from dotenv import load_dotenv
 
 # Configurações Iniciais
@@ -12,7 +14,6 @@ TOKEN_HF = os.getenv("HF_TOKEN")
 client = InferenceClient(token=TOKEN_HF)
 
 def gerar_e_subir():
-    # LISTA DE TEMAS PARA QUANDO VOCÊ ESTIVER SEM IDEIA (MODO SYSTEM_ROOT)
     temas_seeds = [
         "O impacto da IA na telemetria da F1 em 2026",
         "Vulnerabilidades de segurança em sistemas de impressão 3D",
@@ -26,24 +27,23 @@ def gerar_e_subir():
         "A engenharia reversa aplicada", "O vazamento de metadados críticos",
         "A evolução do hardware e firmware", "O protocolo de criptografia quântica",
         "A automação de ataques ofensivos", "A análise forense digital",
-        "O monitoramento preditivo de rede", "A exploração de falhas de memória",
-        "na telemetria da F1", "em impressoras 3D industriais", 
-        "no ecossistema Kali Linux", "em drones de vigilância urbana", 
-        "nos sistemas do Animus (AC)", "no netcode de Street Fighter 6", 
-        "em servidores de infraestrutura crítica", "nos códigos de Dexter Morgan", 
-        "na Máquina de Person of Interest", "no desenvolvimento com Flutter/Dart",
-        "em cenários de guerra cibernética", "para analistas de sistemas sênior", 
-        "direto de Ceilândia/DF", "na perspectiva da Deep Web", 
-        "em ambientes de produção em 2026", "sob a ótica de segurança ofensiva", 
-        "na era do Big Data e IA", "em sistemas legados de alto risco", 
-        "para defesa de ativos digitais", "no submundo do hacking ético",
+        "O monitoramento preditivo de rede", "A exploração de falhas de memória"
     ]
 
     print("--- SYSTEM_ROOT INTERFACE ---")
-    print("Dica: Aperte ENTER para gerar um tema aleatório.")
-    tema_input = input("Qual o tema do post? ").strip()
+
+    # LÓGICA DE DECISÃO HÍBRIDA (PC vs GITHUB)
+    # Se houver argumento do sistema (enviado pelo GitHub), usa ele.
+    # Se não houver, e estiver no PC, pede o input.
+    tema_input = ""
     
-    # LÓGICA DE DECISÃO: TEMA MANUAL OU ALEATÓRIO
+    if len(sys.argv) > 1:
+        tema_input = sys.argv[1] # Recebe do GitHub Action
+    else:
+        # Só pede input se estiver rodando manualmente no PC
+        print("Dica: Aperte ENTER para gerar um tema aleatório.")
+        tema_input = input("Qual o tema do post? ").strip()
+    
     if not tema_input:
         tema = random.choice(temas_seeds)
         print(f"[*] MODO AUTO: Gerando conteúdo sobre: {tema}")
@@ -85,6 +85,10 @@ def gerar_e_subir():
     agora = datetime.now()
     data_formatada = agora.strftime("%d/%m/%Y às %H:%M")
     linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
+    
+    # Validação para evitar erro de índice se a IA responder vazio
+    if not linhas: return
+
     primeira_linha = linhas[0].replace('**', '').replace('#', '').strip()
     titulo_final = primeira_linha.split(':', 1)[1].strip() if ":" in primeira_linha else primeira_linha
     resumo_final = "\n".join(linhas[1:]).replace('**', '').strip() or resumo_ia.replace('**', '').strip()
@@ -113,7 +117,7 @@ def gerar_e_subir():
     with open('post.json', 'w', encoding='utf-8') as f:
         json.dump(post, f, indent=4, ensure_ascii=False)
 
-    print(f"\n[SUCESSO LOCAL] Post '{titulo_final}' salvo com sucesso!")
+    print(f"\n[SUCESSO] Post '{titulo_final}' processado!")
 
 if __name__ == "__main__":
     gerar_e_subir()
