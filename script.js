@@ -13,13 +13,21 @@ async function fetchNews() {
     if (!response.ok) throw new Error("Falha no JSON");
     const posts = await response.json();
 
-  // Localize onde o HTML é montado no seu script.js e adicione a tag <img>
-feed.innerHTML = posts.map(post => `
+    // Localize onde o HTML é montado no seu script.js e adicione a tag <img>
+    feed.innerHTML = posts
+      .map(
+        (post) => `
     <article class="news-card">
         <span class="cat-tag">${post.categoria}</span>
         
-        ${post.imagem ? `<img src="${post.imagem}" class="img-fluid rounded mb-4 shadow" style="width:100%; max-height:450px; object-fit:cover;">` : ''}
-        
+       ${
+         post.imagem
+           ? `<img src="${post.imagem}" class="img-fluid rounded mb-4">`
+           : ""
+       }
+
+      
+    
         <a href="#" class="news-title">${post.titulo}</a>
         <p class="news-excerpt">${post.resumo}</p>
         
@@ -28,7 +36,9 @@ feed.innerHTML = posts.map(post => `
             Por: <strong>${post.autor}</strong> • ${post.local}
         </div>
     </article>
-`).join('');
+`
+      )
+      .join("");
   } catch (error) {
     feed.innerHTML = `<div class="alert alert-light text-center border">Verifique o seu posts.json...</div>`;
   }

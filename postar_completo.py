@@ -92,3 +92,69 @@ def gerar_e_subir():
 
 if __name__ == "__main__":
     gerar_e_subir()
+    
+    # Criar a pasta images se não existir
+    if not os.path.exists('images'):
+        os.makedirs('images')
+
+    print("[2/3] Gerando imagem com Stable Diffusion XL...")
+    # ... código de geração ...
+    
+    nome_img = f"img_{int(time.time())}.jpg"
+    caminho_imagem = os.path.join('images', nome_img) # Define o caminho: images/img_xxx.jpg
+    imagem.save(caminho_imagem)
+
+    # No JSON, salvamos apenas o nome ou o caminho relativo
+    novo_post = {
+        "categoria": "SYSTEM_ROOT",
+        "titulo": titulo_final, 
+        "resumo": resumo_final,
+        "imagem": f"images/{nome_img}", # IMPORTANTE: Incluir o prefixo da pasta aqui
+        "data_hora": data_formatada,
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    }
+
+    # ... parte do Git ...
+    os.system("git add posts.json")
+    os.system("git add images/*.jpg") # Adiciona todas as fotos da nova pasta
+    os.system(f'git commit -m "Post organizado: {tema}"')
+    os.system("git push origin main")
+    
+    
+    # --- NOVA LÓGICA DE DIRETÓRIO DE IMAGENS ---
+    folder = 'images'
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print(f"[*] Pasta '{folder}' criada com sucesso.")
+
+    print("[2/3] Gerando imagem com Stable Diffusion XL...")
+    prompt_img = f"Digital art of {tema}, cinematic lighting, 4k, dark aesthetic"
+    imagem = client.text_to_image(prompt_img, model="stabilityai/stable-diffusion-xl-base-1.0")
+    
+    # Nome do arquivo e caminho completo
+    nome_arquivo = f"img_{int(time.time())}.jpg"
+    caminho_completo = os.path.join(folder, nome_arquivo)
+    
+    imagem.save(caminho_completo)
+    print(f"[*] Imagem salva em: {caminho_completo}")
+
+    # --- ESTRUTURA DO JSON COM CAMINHO DA PASTA ---
+    novo_post = {
+        "categoria": "SYSTEM_ROOT",
+        "titulo": titulo_final, 
+        "resumo": resumo_final,
+        "imagem": f"images/{nome_arquivo}", # O site vai ler a partir da pasta images/
+        "data_hora": data_formatada,
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    }
+
+    # ... (lógica de inserção no posts.json continua igual) ...
+
+    # --- GIT PUSH ATUALIZADO PARA A PASTA IMAGES ---
+    print(f"[3/3] Sincronizando com GitHub...")
+    os.system("git add posts.json")
+    os.system("git add images/*.jpg") # Adiciona especificamente as fotos da pasta
+    os.system(f'git commit -m "Organização: Imagem movida para /images - {tema}"')
+    os.system("git push origin main")
