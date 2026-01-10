@@ -35,7 +35,7 @@ async function fetchNews() {
       )
       .join("");
   } catch (error) {
-    feed.innerHTML = `<div class="alert alert-light text-center border">Verifique o seu posts.json...</div>`;
+    feed.innerHTML = `<div class="alert alert-light text-center border">Verifique o seu post.json...</div>`;
   }
 }
 

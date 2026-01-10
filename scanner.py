@@ -27,11 +27,11 @@ def scanner_financeiro():
         }
 
         # Carregar e atualizar o JSON
-        with open('posts.json', 'r+', encoding='utf-8') as f:
-            posts = json.load(f)
-            posts.insert(0, novo_post)
+        with open('post.json', 'r+', encoding='utf-8') as f:
+            post = json.load(f)
+            post.insert(0, novo_post)
             f.seek(0)
-            json.dump(posts[:15], f, indent=4, ensure_ascii=False) # Mantém apenas os 15 últimos
+            json.dump(post[:15], f, indent=4, ensure_ascii=False) # Mantém apenas os 15 últimos
             
         print("[OK] Dados financeiros integrados ao feed.")
         
