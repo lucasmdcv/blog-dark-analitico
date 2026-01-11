@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"A Arquitetura de Solo-Leveling: Desvendando o Modelo de Progressão em Mundos de RPG\"",
+        "resumo": "Resumo:\nO conceito de solo leveling, popularizado em jogos de RPG como \"Solo Leveling\" e \"Tower of God\", oferece uma experiência de progressão única, onde o personagem cresce e se desenvolve sem a necessidade de interações sociais. Com base em uma estrutura de narrativa linear, o jogador assume o papel de um herói que enfrenta desafios cada vez mais difíceis em um mundo povoado por criaturas estranhas e poderosas.\nA arquitetura de solo leveling se base",
+        "imagem": "images/default_tech.jpg",
+        "data_hora": "10/01/2026 às 21:47",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"O Fim da Privacidade Digital: A Revolução Quântica que Desvenda os Segredos da Internet\"",
         "resumo": "Resumo:\nA Criptografia Quântica é uma tecnologia inovadora que promete tornar os sistemas de comunicação mais seguros do que nunca. No entanto, essa alegria pode se tornar um pesadelo para os defensores da privacidade digital. Com a Criptografia Quântica, os algoritmos de criptografia tradicionais podem ser quebrados instantaneamente, desvendando segredos que antes eram inacessíveis. Isso significa que a privac",
         "imagem": "images/default_tech.jpg",
