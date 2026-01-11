@@ -1,6 +1,5 @@
-
 #!/bin/bash
-# SYSTEM_ROOT - Deploy Engine v7.0 (Direct API Request)
+# SYSTEM_ROOT - Deploy Engine v8.0 (Final/Sanitizado)
 # Estética: Dark/Analítica | Lucas Mendes
 
 CYAN='\033[0;36m'
@@ -13,55 +12,49 @@ echo -e "${CYAN}==========================================${NC}"
 echo -e "${CYAN}      SYSTEM_ROOT // AI DEPLOY ENGINE     ${NC}"
 echo -e "${CYAN}==========================================${NC}"
 
-# 1. Extração limpa do Token
+# 1. Extração e sanitização rigorosa do Token (Remove espaços e aspas)
 if [ -f .env ]; then
     export HF_TOKEN=$(grep HF_TOKEN .env | cut -d '=' -f2 | sed 's/["'\'']//g' | xargs)
-    echo -e "${GREEN}[+] Token sanitizado.${NC}"
+    echo -e "${GREEN}[+] Token sanitizado e injetado.${NC}"
 else
-    echo -e "${RED}[!] Erro: Arquivo .env ausente.${NC}"
+    echo -e "${RED}[!] Erro Crítico: Arquivo .env ausente.${NC}"
     exit 1
 fi
 
 TEMA=${1:-"Cibersegurança Avançada em 2026"}
 
+# 2. Motor Python com InferenceClient (Router Mode)
 python3 - << EOF
 import os, json, time, random, sys, requests
 from datetime import datetime
+from huggingface_hub import InferenceClient
 
 def executar():
     token = os.getenv("HF_TOKEN")
     tema = "$TEMA"
     
-    # Endpoint de Inferência Direta
-    API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"
-    headers = {"Authorization": f"Bearer {token}"}
+    # O InferenceClient gerencia o novo endpoint router.huggingface.co
+    client = InferenceClient(token=token)
 
     prompt = (
-        f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n"
         f"Aja como um Editor-Chefe de Tecnologia. Escreva uma reportagem urgente sobre {tema}. "
-        f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026.\n"
-        f"Responda apenas com o texto da reportagem em Português.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+        f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026."
     )
 
     try:
         print(f"[*] Alvo: {tema}")
-        print("[1/3] Solicitando inferência direta à Hugging Face...")
+        print("[1/3] Gerando conteúdo via Llama-3 (Router)...")
         
-        # Requisição HTTP Direta para bypassar o auto-router
-        payload = {
-            "inputs": prompt,
-            "parameters": {"max_new_tokens": 1200, "temperature": 0.7}
-        }
-        
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
-        
-        if response.status_code != 200:
-            print(f"${RED}[!] Erro na API ({response.status_code}): {response.text}${NC}")
-            return
+        # Chamada Conversacional (padrão Novita/HF Router)
+        response = client.chat_completion(
+            model="meta-llama/Meta-Llama-3-8B-Instruct",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1500,
+            temperature=0.7
+        )
+        resumo_ia = response.choices[0].message.content
 
-        resumo_ia = response.json()[0]['generated_text'].split("<|end_header_id|>")[-1].strip()
-
-        # Assets Visuais
+        # Assets Visuais (Picsum)
         img_id = random.randint(1, 1000)
         img_name = f"img_{int(time.time())}.jpg"
         if not os.path.exists("images"): os.makedirs("images")
@@ -71,8 +64,10 @@ def executar():
         with open(f"images/{img_name}", "wb") as f:
             f.write(res_img.content)
 
-        # Processamento de Texto e JSON
+        # Processamento de Texto e Persistência JSON
         linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
+        if not linhas: return
+
         titulo = linhas[0].replace('#', '').replace('*', '').strip()
         corpo = "\n\n".join(linhas[1:]).replace('*', '').strip()
 
@@ -96,11 +91,12 @@ def executar():
         with open('post.json', 'w', encoding='utf-8') as f:
             json.dump(posts, f, indent=4, ensure_ascii=False)
 
-        print(f"\n${GREEN}[SUCCESS] Deploy: {titulo}${NC}")
+        print(f"\n${GREEN}[SUCCESS] Deploy de '{titulo}' concluído.${NC}")
 
     except Exception as e:
-        print(f"${RED}[!] Erro Crítico: {e}${NC}")
+        print(f"${RED}[!] Falha no Pipeline: {e}${NC}")
 
 executar()
 EOF
+
 echo -e "${CYAN}==========================================${NC}"
