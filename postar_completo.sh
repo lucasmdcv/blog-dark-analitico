@@ -1,5 +1,6 @@
+
 #!/bin/bash
-# SYSTEM_ROOT - Deploy Engine v6.0 (Conversational Mode)
+# SYSTEM_ROOT - Deploy Engine v7.0 (Direct API Request)
 # Estética: Dark/Analítica | Lucas Mendes
 
 CYAN='\033[0;36m'
@@ -12,6 +13,7 @@ echo -e "${CYAN}==========================================${NC}"
 echo -e "${CYAN}      SYSTEM_ROOT // AI DEPLOY ENGINE     ${NC}"
 echo -e "${CYAN}==========================================${NC}"
 
+# 1. Extração limpa do Token
 if [ -f .env ]; then
     export HF_TOKEN=$(grep HF_TOKEN .env | cut -d '=' -f2 | sed 's/["'\'']//g' | xargs)
     echo -e "${GREEN}[+] Token sanitizado.${NC}"
@@ -25,44 +27,51 @@ TEMA=${1:-"Cibersegurança Avançada em 2026"}
 python3 - << EOF
 import os, json, time, random, sys, requests
 from datetime import datetime
-from huggingface_hub import InferenceClient
 
 def executar():
     token = os.getenv("HF_TOKEN")
     tema = "$TEMA"
     
-    # Configuração para Conversational Task
-    client = InferenceClient(model="meta-llama/Meta-Llama-3-8B-Instruct", token=token)
+    # Endpoint de Inferência Direta
+    API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"
+    headers = {"Authorization": f"Bearer {token}"}
 
     prompt = (
+        f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n"
         f"Aja como um Editor-Chefe de Tecnologia. Escreva uma reportagem urgente sobre {tema}. "
-        f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026. "
-        f"Responda apenas com o texto da reportagem em Português."
+        f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026.\n"
+        f"Responda apenas com o texto da reportagem em Português.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
     )
 
     try:
         print(f"[*] Alvo: {tema}")
-        print("[1/3] Gerando reportagem (Conversational)...")
+        print("[1/3] Solicitando inferência direta à Hugging Face...")
         
-        # Uso do chat_completion para suportar o provedor Novita
-        response = client.chat_completion(
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=1500,
-            temperature=0.7
-        )
-        resumo_ia = response.choices[0].message.content
+        # Requisição HTTP Direta para bypassar o auto-router
+        payload = {
+            "inputs": prompt,
+            "parameters": {"max_new_tokens": 1200, "temperature": 0.7}
+        }
+        
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
+        
+        if response.status_code != 200:
+            print(f"${RED}[!] Erro na API ({response.status_code}): {response.text}${NC}")
+            return
 
-        # Captura de Imagem
+        resumo_ia = response.json()[0]['generated_text'].split("<|end_header_id|>")[-1].strip()
+
+        # Assets Visuais
         img_id = random.randint(1, 1000)
         img_name = f"img_{int(time.time())}.jpg"
         if not os.path.exists("images"): os.makedirs("images")
         
         print("[2/3] Sincronizando assets visuais...")
-        res_img = requests.get(f"https://picsum.photos/id/{img_id}/1600/900", timeout=10)
+        res_img = requests.get(f"https://picsum.photos/id/{img_id}/1600/900", timeout=15)
         with open(f"images/{img_name}", "wb") as f:
             f.write(res_img.content)
 
-        # Parsing JSON
+        # Processamento de Texto e JSON
         linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
         titulo = linhas[0].replace('#', '').replace('*', '').strip()
         corpo = "\n\n".join(linhas[1:]).replace('*', '').strip()
@@ -94,5 +103,4 @@ def executar():
 
 executar()
 EOF
-
 echo -e "${CYAN}==========================================${NC}"
