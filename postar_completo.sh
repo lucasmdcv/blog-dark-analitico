@@ -20,6 +20,13 @@ TEMA=${1:-"Ciberseguranca Avancada em 2026"}
 MODEL="meta-llama/Llama-3.1-8B-Instruct"
 echo -e "[*] Alvo: $TEMA"
 echo -e "[1/3] Gerando conteudo via Router (Gratuito)..."
+# 2. Requisicao via Router Oficial (Gratuito)
+echo -e "[1/3] Gerando conteudo via Router..."
+RESPONSE=$(curl -s -X POST "https://router.huggingface.co/hf-inference/v1/chat/completions" \
+-H "Authorization: Bearer $HF_TOKEN" \
+-H "Content-Type: application/json" \
+-d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Escreva um post analitico sobre $TEMA\"}],\"max_tokens\":1200}")
+
 RESPONSE=$(curl -s -X POST "https://router.huggingface.co/hf-inference/v1/chat/completions" \
 -H "Authorization: Bearer $HF_TOKEN" \
 -H "Content-Type: application/json" \
