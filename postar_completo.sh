@@ -1,5 +1,5 @@
 #!/bin/bash
-# SYSTEM_ROOT - Deploy Engine v5.0 (Direct API Mode)
+# SYSTEM_ROOT - Deploy Engine v6.0 (Conversational Mode)
 # Estética: Dark/Analítica | Lucas Mendes
 
 CYAN='\033[0;36m'
@@ -12,11 +12,9 @@ echo -e "${CYAN}==========================================${NC}"
 echo -e "${CYAN}      SYSTEM_ROOT // AI DEPLOY ENGINE     ${NC}"
 echo -e "${CYAN}==========================================${NC}"
 
-# 1. Carregamento e Limpeza de Variáveis
 if [ -f .env ]; then
-    # O sed remove aspas e espaços extras que podem corromper o Token
     export HF_TOKEN=$(grep HF_TOKEN .env | cut -d '=' -f2 | sed 's/["'\'']//g' | xargs)
-    echo -e "${GREEN}[+] Token extraído e sanitizado.${NC}"
+    echo -e "${GREEN}[+] Token sanitizado.${NC}"
 else
     echo -e "${RED}[!] Erro: Arquivo .env ausente.${NC}"
     exit 1
@@ -24,7 +22,6 @@ fi
 
 TEMA=${1:-"Cibersegurança Avançada em 2026"}
 
-# 2. Execução via Python (Método Direct Generation)
 python3 - << EOF
 import os, json, time, random, sys, requests
 from datetime import datetime
@@ -34,28 +31,26 @@ def executar():
     token = os.getenv("HF_TOKEN")
     tema = "$TEMA"
     
-    # Endpoint direto para evitar o Auto-Router
-    model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
-    client = InferenceClient(model=model_id, token=token)
+    # Configuração para Conversational Task
+    client = InferenceClient(model="meta-llama/Meta-Llama-3-8B-Instruct", token=token)
 
     prompt = (
-        f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n"
         f"Aja como um Editor-Chefe de Tecnologia. Escreva uma reportagem urgente sobre {tema}. "
         f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026. "
-        f"Responda apenas com o texto da reportagem.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+        f"Responda apenas com o texto da reportagem em Português."
     )
 
     try:
         print(f"[*] Alvo: {tema}")
-        print("[1/3] Gerando reportagem (Direct API)...")
+        print("[1/3] Gerando reportagem (Conversational)...")
         
-        # Uso do text_generation para bypassar o erro de roteamento
-        resumo_ia = client.text_generation(
-            prompt,
-            max_new_tokens=1500,
-            temperature=0.7,
-            stop_sequences=["<|eot_id|>"]
+        # Uso do chat_completion para suportar o provedor Novita
+        response = client.chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1500,
+            temperature=0.7
         )
+        resumo_ia = response.choices[0].message.content
 
         # Captura de Imagem
         img_id = random.randint(1, 1000)
@@ -101,4 +96,3 @@ executar()
 EOF
 
 echo -e "${CYAN}==========================================${NC}"
-
