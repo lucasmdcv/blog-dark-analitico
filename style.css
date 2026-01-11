@@ -1,6 +1,9 @@
+/* Configurações Globais - Estética Dark */
 body {
     font-family: 'Inter', sans-serif;
     letter-spacing: -0.5px;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 .font-monospace {
@@ -9,14 +12,38 @@ body {
 
 .fw-black { font-weight: 900; }
 
-.grayscale {
-    filter: grayscale(100%) contrast(120%);
-    transition: 0.5s;
+/* --- COMPONENTES VISUAIS --- */
+
+/* Imagem com Estética de Vigilância */
+.img-analitica {
+    height: 250px;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(120%) brightness(0.7);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card:hover .grayscale {
-    filter: grayscale(0%) contrast(100%);
+.card:hover .img-analitica {
+    filter: grayscale(0%) contrast(100%) brightness(1);
+    transform: scale(1.03);
 }
+
+/* Corpo do Card e Tipografia */
+.card-body p {
+    color: #b0b8c1 !important; /* Legibilidade para ADS */
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+h2.h4 {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.2); /* Glow Ciano Sutil */
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}
+
+/* --- ANIMAÇÕES DE SISTEMA --- */
 
 .animate-pulse {
     animation: pulse 2s infinite;
@@ -28,31 +55,31 @@ body {
     100% { opacity: 1; }
 }
 
-/* Efeito de entrada dos posts */
+/* Efeito de entrada (Scanline + Slide) */
 .animate-in {
-    animation: slideUp 0.6s ease-out forwards;
+    animation: scanline 0.6s ease-out forwards;
 }
 
-/* No seu style.css */
-
-.card-body p {
-    color: #b0b8c1 !important; /* Um cinza claro azulado, estilo terminal sênior */
-    line-height: 1.6;
-    font-weight: 400;
+@keyframes scanline {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px);
+        filter: blur(5px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+    }
 }
 
-/* Para dar destaque aos títulos no fundo preto */
-h2.h4 {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.2); /* Sutil brilho neon ciano */
+/* Scrollbar Hacker */
+::-webkit-scrollbar {
+    width: 5px;
 }
-
-/* Ajuste nos metadados (data/local) */
-.text-secondary {
-    color: #6c757d !important; /* Mantém o secundário legível */
+::-webkit-scrollbar-track {
+    background: #000;
 }
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+::-webkit-scrollbar-thumb {
+    background: #dc3545; /* Vermelho SYSTEM_ROOT */
 }
