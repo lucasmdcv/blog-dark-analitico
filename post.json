@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "Título: \"A Promessa de Jesus: Segurança e Esperança\"",
+        "resumo": "Resumo técnico: A promessa de Jesus é um conceito central da teologia cristã que refere-se à garantia que Ele deu a seus seguidores de que, mesmo em situações de sofrimento e perseguição, eles serão cuidados e protegidos por Deus. A promessa é encontrada em várias passagens da Bíblia, incluindo: * Marcos 13:22-23: \"Se vocês ouvissem a palavra, então ouviriam a palavra.\" * Mateus 10:28: \"Não tenham medo de aqueles que matam o corpo mas",
+        "imagem": "images/img_1768094890.jpg",
+        "data_hora": "11/01/2026 01:28",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "Título: A Lógica de Solo Leveling: Uma Abordagem Prática para \"Subir de Nível\" em Arquitetura de Dados",
         "resumo": "Resumo Técnico: A lógica de jogo \"Solo Leveling\" pode ser aplicada em arquitetura de dados para melhorar a eficiência e a escalabilidade de sistemas de armazenamento de dados. Neste texto, vamos explorar como a lógica de \"subir de nível\" pode ser aplicada em arquitetura de dados para melhorar a capacidade de processamento e a flexibilidade dos sistemas. Princípios Básicos: A lógica de \"",
         "imagem": "images/img_1768094763.jpg",
