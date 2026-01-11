@@ -65,18 +65,18 @@ def gerar_e_subir():
         print(f"Erro na IA de texto: {e}")
         return
 
-    # 2. BUSCA DE IMAGEM ESTÁVEL (UNSPLASH - SEM COTA IA)
-    print("[2/3] Capturando asset visual estável...")
+   # 2. BUSCA DE IMAGEM ESTÁVEL (UNSPLASH - SEM COTA IA)
+    print("[2/3] Capturando asset visual estável via Unsplash...")
     folder = 'images'
     if not os.path.exists(folder):
         os.makedirs(folder)
 
     try:
-        # Busca imagens reais de tecnologia/dark para manter sua estética
-        query = f"{tema},tech,cyberpunk,matrix".replace(" ", ",")
+        # Busca imagens baseadas no tema para manter sua estética Dark/Analítica
+        query = f"{tema},technology,dark,hacker".replace(" ", ",")
         url_unsplash = f"https://source.unsplash.com/featured/1600x900?{query}"
         
-        headers = {'User-Agent': 'Mozilla/5.0'}
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
         response_img = requests.get(url_unsplash, headers=headers, timeout=15)
         
         if response_img.status_code == 200:
@@ -84,15 +84,14 @@ def gerar_e_subir():
             caminho_completo = os.path.join(folder, nome_arquivo)
             with open(caminho_completo, 'wb') as f:
                 f.write(response_img.content)
-            print(f"[*] Imagem capturada: {nome_arquivo}")
+            print(f"[*] Imagem capturada com sucesso: {nome_arquivo}")
         else:
-            print("[!] Erro Unsplash. Usando fallback.")
-            nome_arquivo = "default_tech.jpg"
+            raise Exception(f"Erro Unsplash: Status {response_img.status_code}")
             
     except Exception as e:
-        print(f"Erro no pipeline de imagem: {e}")
+        print(f"Erro no pipeline de imagem (Usando Fallback): {e}")
+        # Se tudo falhar, define um nome mas não trava o script
         nome_arquivo = "default_tech.jpg"
-        
         
     # 3. TRATAMENTO DOS DADOS
     agora = datetime.now()
