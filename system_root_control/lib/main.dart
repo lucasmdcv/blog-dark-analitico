@@ -38,14 +38,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _temaController = TextEditingController();
 
-  // Variáveis de Controle Analítico
   String _deployStatus = "IDLE";
   Color _statusColor = Colors.orangeAccent;
   double _progressoTransmissao = 0.0;
   int _segundosDecorridos = 0;
-  int? _tempoFinalProcessamento; // Tempo real de resposta do GitHub
+  int? _tempoFinalProcessamento;
   Timer? _progressoTimer;
-  Timer? _statusCheckTimer; // Sonda de verificação da API
+  Timer? _statusCheckTimer;
 
   late String githubToken;
   final String repoOwner = "lucasmdcv";
@@ -73,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
     _buscarDadosReais();
   }
 
-  // Sonda que pergunta ao GitHub se a Action terminou
+  // SONDA DE VERIFICAÇÃO COM LOGICA DE FECHAMENTO (100%)
   Future<void> _verificarStatusAction() async {
     final url = Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/actions/runs?per_page=1');
     
@@ -88,18 +87,22 @@ class _DashboardState extends State<Dashboard> {
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
           final lastRun = data['workflow_runs'][0];
-          String status = lastRun['status']; // 'queued', 'in_progress', 'completed'
-          String conclusion = lastRun['conclusion'] ?? ""; // 'success', 'failure'
+          String status = lastRun['status']; 
+          String conclusion = lastRun['conclusion'] ?? "";
 
           if (status == "completed") {
             timer.cancel();
-            _progressoTimer?.cancel(); // Para o cronômetro visual
+            _progressoTimer?.cancel(); 
+            
             setState(() {
               _tempoFinalProcessamento = _segundosDecorridos;
               _deployStatus = conclusion == "success" ? "CONCLUÍDO" : "FALHA GH";
               _statusColor = conclusion == "success" ? Colors.greenAccent : Colors.redAccent;
+              
+              // ARROCHO: Força a UI a preencher 100% ao finalizar
+              _progressoTransmissao = 1.0; 
             });
-            _buscarDadosReais(); // Sincroniza os logs logo após o término
+            _buscarDadosReais(); 
           }
         }
       } catch (e) {
@@ -120,9 +123,7 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         _segundosDecorridos++;
         if (_progressoTransmissao < 0.95) {
-          _progressoTransmissao += 1 / 60;
-        } else {
-          // Barra fica em 95% até o GitHub avisar que acabou
+          _progressoTransmissao += 1 / 60; // Estimativa de 1 min
         }
       });
     });
@@ -179,15 +180,7 @@ class _DashboardState extends State<Dashboard> {
       );
 
       if (response.statusCode == 204) {
-        _verificarStatusAction(); // INICIA O MONITORAMENTO REAL
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Protocolo aceito pelo GitHub (Status 204)"),
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
+        _verificarStatusAction();
       } else {
         setState(() {
           _deployStatus = "ERRO: ${response.statusCode}";
@@ -312,6 +305,19 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(height: 5),
                   _buildStatusRow("GITHUB ACTION", _deployStatus, _statusColor),
                 ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
+                minimumSize: const Size(double.infinity, 45),
+              ),
+              onPressed: _abrirSite,
+              icon: Icon(Icons.language, color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
+              label: Text(
+                "ACESSAR TERMINAL WEB (SITE)",
+                style: TextStyle(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
               ),
             ),
             const SizedBox(height: 20),
