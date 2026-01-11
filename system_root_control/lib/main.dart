@@ -38,6 +38,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _temaController = TextEditingController();
 
+  // Status de Controle
   String _deployStatus = "IDLE";
   Color _statusColor = Colors.orangeAccent;
   double _progressoTransmissao = 0.0;
@@ -46,6 +47,7 @@ class _DashboardState extends State<Dashboard> {
   Timer? _progressoTimer;
   Timer? _statusCheckTimer;
 
+  // Credenciais e Repo
   late String githubToken;
   final String repoOwner = "lucasmdcv";
   final String repoName = "blog-dark-analitico";
@@ -72,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
     _buscarDadosReais();
   }
 
-  // SONDA DE VERIFICAÇÃO COM LOGICA DE FECHAMENTO (100%)
+  // Monitoramento do Workflow (Polling)
   Future<void> _verificarStatusAction() async {
     final url = Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/actions/runs?per_page=1');
     
@@ -98,8 +100,6 @@ class _DashboardState extends State<Dashboard> {
               _tempoFinalProcessamento = _segundosDecorridos;
               _deployStatus = conclusion == "success" ? "CONCLUÍDO" : "FALHA GH";
               _statusColor = conclusion == "success" ? Colors.greenAccent : Colors.redAccent;
-              
-              // ARROCHO: Força a UI a preencher 100% ao finalizar
               _progressoTransmissao = 1.0; 
             });
             _buscarDadosReais(); 
@@ -123,7 +123,7 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         _segundosDecorridos++;
         if (_progressoTransmissao < 0.95) {
-          _progressoTransmissao += 1 / 60; // Estimativa de 1 min
+          _progressoTransmissao += 1 / 60; // Simulação de 60s
         }
       });
     });
@@ -162,6 +162,7 @@ class _DashboardState extends State<Dashboard> {
 
     _iniciarBarraProgresso();
 
+    // NOTA: Endpoint correto para disparar workflow_dispatch
     final url = Uri.parse(
       'https://api.github.com/repos/$repoOwner/$repoName/actions/workflows/postar.yml/dispatches',
     );
@@ -220,131 +221,156 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.cyanAccent.withOpacity(0.5)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: [
-                  const Text("DIRETRIZ DE ENTRADA: QUAL O TEMA DO POST?",
-                      style: TextStyle(color: Colors.cyanAccent, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _temaController,
-                    decoration: const InputDecoration(hintText: "Ex: Série You Netflix...", border: OutlineInputBorder()),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyanAccent,
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size(double.infinity, 45),
-                    ),
-                    onPressed: () {
-                      String tema = _temaController.text;
-                      if (tema.isEmpty) {
-                        _temasAleatorios.shuffle();
-                        tema = _temasAleatorios.first;
-                      }
-                      _dispararExecucao(tema);
-                    },
-                    icon: const Icon(Icons.bolt),
-                    label: const Text("EXECUTAR: NOVO BLOG"),
-                  ),
-                  
-                  if (_deployStatus == "TRANSMITINDO..." || _tempoFinalProcessamento != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Column(
-                        children: [
-                          LinearProgressIndicator(
-                            value: _progressoTransmissao,
-                            backgroundColor: Colors.white10,
-                            color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _tempoFinalProcessamento == null 
-                                    ? "TEMPO: ${_segundosDecorridos}s" 
-                                    : "TEMPO TOTAL GH: ${_tempoFinalProcessamento}s",
-                                style: TextStyle(
-                                  color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
-                                  fontSize: 10,
-                                  fontFamily: 'monospace',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "${(_progressoTransmissao * 100).toStringAsFixed(0)}% CONCLUÍDO",
-                                style: const TextStyle(color: Colors.cyanAccent, fontSize: 10, fontFamily: 'monospace'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
+            // Painel de Entrada
+            _buildInputPanel(),
             const SizedBox(height: 15),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(4),
-                border: const Border(left: BorderSide(color: Colors.cyanAccent, width: 3)),
-              ),
-              child: Column(
-                children: [
-                  _buildStatusRow("MOTOR IA (LLAMA-3)", "OPERACIONAL", Colors.greenAccent),
-                  const SizedBox(height: 5),
-                  _buildStatusRow("GITHUB ACTION", _deployStatus, _statusColor),
-                ],
-              ),
-            ),
+            // Painel de Status
+            _buildStatusPanel(),
             const SizedBox(height: 20),
-            OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
-                minimumSize: const Size(double.infinity, 45),
-              ),
-              onPressed: _abrirSite,
-              icon: Icon(Icons.language, color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
-              label: Text(
-                "ACESSAR TERMINAL WEB (SITE)",
-                style: TextStyle(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
-              ),
-            ),
+            _buildSiteButton(),
             const SizedBox(height: 20),
             const Text("TRANSMISSÕES RECENTES (LOGS):", style: TextStyle(color: Colors.greenAccent, fontSize: 12)),
             const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _logs.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.white.withOpacity(0.05),
-                    child: Row(
-                      children: [
-                        Text("[${_logs[index]['hash']}]", style: const TextStyle(color: Colors.greenAccent, fontFamily: 'monospace')),
-                        const SizedBox(width: 10),
-                        Expanded(child: Text(_logs[index]['msg']!, overflow: TextOverflow.ellipsis)),
-                        Text(_logs[index]['data']!, style: const TextStyle(fontSize: 10, color: Colors.grey)),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+            _buildLogsList(),
           ],
         ),
+      ),
+    );
+  }
+
+  // Widgets de UI Componentizados para Scannability
+  Widget _buildInputPanel() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.cyanAccent.withOpacity(0.5)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          const Text("DIRETRIZ DE ENTRADA: QUAL O TEMA DO POST?",
+              style: TextStyle(color: Colors.cyanAccent, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          TextField(
+            controller: _temaController,
+            decoration: const InputDecoration(
+                hintText: "aleatorio", 
+                border: OutlineInputBorder(),
+                hintStyle: TextStyle(color: Colors.white24)),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.cyanAccent,
+              foregroundColor: Colors.black,
+              minimumSize: const Size(double.infinity, 45),
+            ),
+            onPressed: () {
+              String tema = _temaController.text;
+              if (tema.isEmpty) {
+                _temasAleatorios.shuffle();
+                tema = _temasAleatorios.first;
+              }
+              _dispararExecucao(tema);
+            },
+            icon: const Icon(Icons.bolt),
+            label: const Text("EXECUTAR: NOVO BLOG"),
+          ),
+          if (_deployStatus == "TRANSMITINDO..." || _tempoFinalProcessamento != null)
+            _buildProgressBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Column(
+        children: [
+          LinearProgressIndicator(
+            value: _progressoTransmissao,
+            backgroundColor: Colors.white10,
+            color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                _tempoFinalProcessamento == null 
+                    ? "TEMPO: ${_segundosDecorridos}s" 
+                    : "TEMPO TOTAL GH: ${_tempoFinalProcessamento}s",
+                style: TextStyle(
+                  color: _tempoFinalProcessamento == null ? Colors.cyanAccent : Colors.greenAccent,
+                  fontSize: 10,
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "${(_progressoTransmissao * 100).toStringAsFixed(0)}% CONCLUÍDO",
+                style: const TextStyle(color: Colors.cyanAccent, fontSize: 10, fontFamily: 'monospace'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusPanel() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(4),
+        border: const Border(left: BorderSide(color: Colors.cyanAccent, width: 3)),
+      ),
+      child: Column(
+        children: [
+          _buildStatusRow("MOTOR IA (LLAMA-3)", "OPERACIONAL", Colors.greenAccent),
+          const SizedBox(height: 5),
+          _buildStatusRow("GITHUB ACTION", _deployStatus, _statusColor),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSiteButton() {
+    return OutlinedButton.icon(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
+        minimumSize: const Size(double.infinity, 45),
+      ),
+      onPressed: _abrirSite,
+      icon: Icon(Icons.language, color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
+      label: Text(
+        "ACESSAR TERMINAL WEB (SITE)",
+        style: TextStyle(color: _tempoFinalProcessamento != null ? Colors.greenAccent : Colors.grey),
+      ),
+    );
+  }
+
+  Widget _buildLogsList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _logs.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(8),
+            color: Colors.white.withOpacity(0.05),
+            child: Row(
+              children: [
+                Text("[${_logs[index]['hash']}]", style: const TextStyle(color: Colors.greenAccent, fontFamily: 'monospace')),
+                const SizedBox(width: 10),
+                Expanded(child: Text(_logs[index]['msg']!, overflow: TextOverflow.ellipsis)),
+                Text(_logs[index]['data']!, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
