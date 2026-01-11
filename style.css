@@ -1,132 +1,39 @@
-:root {
-    --primary: #c4170c; /* Vermelho G1/Alerta */
-    --dark-bg: #0a0a0a; /* Fundo quase preto */
-    --card-bg: #111111; /* Fundo dos cards */
-    --text-main: #e0e0e0; /* Cinza claro para leitura */
-    --kali-green: #00ff41; /* Verde Matrix */
-}
-
 body {
-    background-color: var(--dark-bg); /* MUDANÇA: Agora o fundo é escuro */
-    color: var(--text-main);
     font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
+    letter-spacing: -0.5px;
 }
 
-/* Navbar Centralizada */
-.navbar {
-    background-color: #000;
-    border-bottom: 4px solid var(--primary);
-    padding: 1.5rem 0;
+.font-monospace {
+    font-family: 'JetBrains Mono', 'Courier New', monospace !important;
 }
 
-.navbar-brand {
-    font-family: 'Courier New', monospace; /* Fonte de terminal */
-    font-weight: 900;
-    color: #00ff41 !important; /* Verde Matrix */
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.fw-black { font-weight: 900; }
+
+.grayscale {
+    filter: grayscale(100%) contrast(120%);
+    transition: 0.5s;
 }
 
-/* Layout de Conteúdo */
-.main-content {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 0 15px;
+.card:hover .grayscale {
+    filter: grayscale(0%) contrast(100%);
 }
 
-/* Cards de Notícia */
-.news-card {
-    background-color: var(--card-bg);
-    border: 1px solid #222;
-    padding: 30px;
-    margin-bottom: 30px;
-    text-align: center;
-    border-radius: 8px; /* Cantos levemente arredondados para estética moderna */
+.animate-pulse {
+    animation: pulse 2s infinite;
 }
 
-/* Container da imagem para manter o enquadramento */
-.news-card img {
-    width: 100%;            /* Ocupa toda a largura do card */
-    height: 400px;         /* Altura fixa para manter o padrão visual */
-    object-fit: cover;     /* Enquadra a imagem sem esticar (estilo Netflix) */
-    object-position: center; /* Foca no centro da imagem */
-    border-radius: 8px;    /* Mantém os cantos arredondados */
-    border: 1px solid #333; /* Borda sutil para separar do fundo dark */
-    margin-bottom: 20px;
-    display: block;
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
 }
 
-/* Responsividade para telas menores (Celulares) */
-@media (max-width: 600px) {
-    .news-card img {
-        height: 250px; /* Diminui a altura em telas pequenas */
-    }
+/* Efeito de entrada dos posts */
+.animate-in {
+    animation: slideUp 0.6s ease-out forwards;
 }
 
-.news-card img {
-    filter: grayscale(20%) brightness(0.8) contrast(1.2);
-    transition: 0.3s ease-in-out;
-}
-
-.news-card:hover img {
-    filter: grayscale(0%) brightness(1); /* Ganha cor e luz ao passar o mouse */
-    border-color: #00ff41; /* Borda brilha em verde Matrix */
-}
-
-
-
-.cat-tag {
-    color: var(--primary);
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 15px;
-}
-
-.news-title {
-    color: #ffffff !important; /* Branco puro para brilhar no fundo escuro */
-    display: block;
-    font-size: 2rem; /* Aumentei para o clickbait aparecer bem */
-    margin: 15px 0;
-    text-decoration: none;
-    font-weight: bold;
-    line-height: 1.2;
-}
-
-.news-title:hover {
-    color: var(--kali-green) !important; /* Efeito hover estilo Hacker */
-}
-
-.news-excerpt {
-    color: #b0b0b0; /* Cinza para o resumo não brigar com o título */
-    font-size: 1.1rem;
-    line-height: 1.6;
-    max-width: 700px;
-    margin: 0 auto 20px auto;
-}
-
-.news-meta {
-    font-size: 0.85rem;
-    color: #666;
-    border-top: 1px solid #222;
-    padding-top: 15px;
-    margin-top: 15px;
-}
-
-.news-meta strong {
-    color: var(--kali-green); /* Seu nome Lucas Mendes em verde Matrix */
-}
-
-/* Badge de Live */
-#live-badge {
-    animation: blink 1.5s infinite;
-    color: var(--primary);
-}
-
-@keyframes blink { 
-    0%, 100% { opacity: 1; } 
-    50% { opacity: 0.3; } 
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
