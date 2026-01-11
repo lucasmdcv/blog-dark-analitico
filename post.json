@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"Dominando a Economia Digital: Como Criar Sites Lucrativos e Ganhar Dinheiro em Português do Brasil\"",
+        "resumo": "Resumo:\n\"Você está pronto para transformar sua vida financeira e se tornar um mestre da economia digital? Com o crescimento exponencial da internet e do comércio eletrônico, criar sites lucrativos em Português do Brasil é uma oportunidade de ouro. Neste guia, você aprenderá as técnicas mais avançadas para criar sites que gerem receita, desde a seleção de nichos de alta demanda até a otimização de motores de busca e a gestão de tráfego",
+        "imagem": "images/img_1768093719.jpg",
+        "data_hora": "10/01/2026 às 22:08",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"O Foco no Progresso: Uma Análise In-Depth do Solo Levelling em Jogos de Rpg\"",
         "resumo": "Resumo: O conceito de solo levelling, que envolve a ideia de que os jogadores progressam sozinhos em jogos de RPG, desafiando os padrões tradicionais de exploração e combate, é uma abordagem revolucionária que está transformando a indústria dos jogos. Ao analisar os benefícios e desafios do solo levelling, podemos compreender melhor como ele afeta a experiência do jogador e como ele pode ser implementado de forma eficaz em jogos de",
         "imagem": "images/default_tech.jpg",
