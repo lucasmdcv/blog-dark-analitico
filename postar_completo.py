@@ -65,22 +65,34 @@ def gerar_e_subir():
         print(f"Erro na IA de texto: {e}")
         return
 
-    # 2. GERAÇÃO DE IMAGEM
-    print("[2/3] Gerando imagem com Stable Diffusion XL...")
+    # 2. BUSCA DE IMAGEM (ESTÁVEL - SEM COTA IA)
+    print("[2/3] Buscando imagem técnica no Unsplash...")
     folder = 'images'
     if not os.path.exists(folder):
         os.makedirs(folder)
 
     try:
-        prompt_img = f"Digital art of {tema}, cinematic lighting, 4k, dark aesthetic, high quality"
-        imagem = client.text_to_image(prompt_img, model="stabilityai/stable-diffusion-xl-base-1.0")
-        nome_arquivo = f"img_{int(time.time())}.jpg"
-        caminho_completo = os.path.join(folder, nome_arquivo)
-        imagem.save(caminho_completo)
+        # Usamos o Source do Unsplash com o tema como palavra-chave
+        # Adicionamos 'tech,dark' para manter a sua estética analítica
+        termo_busca = tema.replace(" ", ",")
+        url_imagem = f"https://source.unsplash.com/1600x900/?{termo_busca},technology,dark"
+        
+        response_img = requests.get(url_imagem, timeout=15)
+        if response_img.status_code == 200:
+            nome_arquivo = f"img_{int(time.time())}.jpg"
+            caminho_completo = os.path.join(folder, nome_arquivo)
+            with open(caminho_completo, 'wb') as f:
+                f.write(response_img.content)
+            print(f"[*] Imagem capturada com sucesso: {nome_arquivo}")
+        else:
+            raise Exception("Erro ao baixar do Unsplash")
+            
     except Exception as e:
-        print(f"Erro na IA de imagem: {e}")
-        return
-
+        print(f"Erro ao capturar imagem: {e}")
+        # Placeholder caso o site caia (Resiliência)
+        nome_arquivo = "default_tech.jpg"
+        
+        
     # 3. TRATAMENTO DOS DADOS
     agora = datetime.now()
     data_formatada = agora.strftime("%d/%m/%Y às %H:%M")
