@@ -20,11 +20,11 @@ TEMA=${1:-"Ciberseguranca Avancada em 2026"}
 MODEL="meta-llama/Llama-3.1-8B-Instruct"
 echo -e "[*] Alvo: $TEMA"
 echo -e "[1/3] Gerando conteudo via Router (Gratuito)..."
-# Requisicao Otimizada (Single Call)
+# Requisicao corrigida para o Router Gratuito (Matando o Not Found)
 RESPONSE=$(curl -s -X POST "https://router.huggingface.co/hf-inference/v1/chat/completions" \
 -H "Authorization: Bearer $HF_TOKEN" \
 -H "Content-Type: application/json" \
--d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Aja como um analista de elite. Escreva um post analitico para um blog dark sobre: $TEMA. Use markdown, hashtags e uma conclusao tecnica.\"}],\"max_tokens\":1200,\"temperature\":0.7}")
+-d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Aja como um analista de elite. Escreva um post analitico para o blog dark sobre: $TEMA. Use markdown, hashtags e uma conclusao tecnica.\"}],\"max_tokens\":1200,\"temperature\":0.7}")
 RESUMO_IA=$(echo "$RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['choices'][0]['message']['content'])" 2>/dev/null)
 if [ -z "$RESUMO_IA" ] || [[ "$RESPONSE" == *"error"* ]]; then
 echo -e "${RED}[!] Falha na API (Router). Resposta: $RESPONSE${NC}"
