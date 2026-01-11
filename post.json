@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"O Foco no Progresso: Uma Análise In-Depth do Solo Levelling em Jogos de Rpg\"",
+        "resumo": "Resumo: O conceito de solo levelling, que envolve a ideia de que os jogadores progressam sozinhos em jogos de RPG, desafiando os padrões tradicionais de exploração e combate, é uma abordagem revolucionária que está transformando a indústria dos jogos. Ao analisar os benefícios e desafios do solo levelling, podemos compreender melhor como ele afeta a experiência do jogador e como ele pode ser implementado de forma eficaz em jogos de",
+        "imagem": "images/default_tech.jpg",
+        "data_hora": "10/01/2026 às 21:54",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"Desmontando o Máximo: A Engenharia Reversa em Português do Brasil - Uma Viagem ao Mundo dos Códigos Secretos\"",
         "resumo": "Resumo:\n\"Imagine-se em uma missão de espionagem, onde você precisa descobrir os segredos de um software ou hardware inovador. A engenharia reversa é a arte de desmontar e analisar produtos técnicos, desvendando seus códigos e mecanismos internos. Neste mundo onde a percepção é tudo, os hackers e engenheiros de software mais talentosos empregam a engenharia reversa para desbloquear as",
         "imagem": "images/default_tech.jpg",
