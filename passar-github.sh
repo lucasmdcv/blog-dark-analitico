@@ -40,3 +40,21 @@ else
     echo -e "${RED}[!] Erro no Push. Verifique sua conexão ou GITHUB_TOKEN.${NC}"
     exit 1
 fi
+# ... (parte inicial do script igual)
+
+git commit -m "$MENSAGEM"
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[+] Commit realizado.${NC}"
+else
+    echo -e "${RED}[!] Nada para commitar.${NC}"
+fi
+
+# NOVIDADE: Sincroniza antes de subir
+echo -e "${CYAN}[*] Puxando atualizações remotas (Pull)...${NC}"
+git pull origin main --rebase
+
+# 3. Push para o Main
+echo -e "${CYAN}[*] Realizando Push para o GitHub...${NC}"
+git push origin main
+# ... (resto do script)
+
