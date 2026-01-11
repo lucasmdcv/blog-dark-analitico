@@ -1,142 +1,73 @@
-import os
-import json
-import time
-import random
-import sys # <--- ADICIONADO: Para capturar o tema do Flutter
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os, json, time, random, sys, requests
 from datetime import datetime
 from huggingface_hub import InferenceClient
-import requests
 from dotenv import load_dotenv
 
-# Configurações Iniciais
+# 1. SETUP DE AMBIENTE (LINUX FRIENDLY)
 load_dotenv()
 TOKEN_HF = os.getenv("HF_TOKEN")
 client = InferenceClient(token=TOKEN_HF)
 
-def gerar_e_subir():
-    temas_seeds = [
-        "O impacto da IA na telemetria da F1 em 2026",
-        "Vulnerabilidades de segurança em sistemas de impressão 3D",
-        "Engenharia reversa e análise de malwares no Kali Linux",
-        "Como a análise de metadados em 2026 prenderia Dexter Morgan",
-        "A arquitetura de dados por trás da Máquina de Person of Interest",
-        "O futuro do desenvolvimento Mobile com Flutter e integração de IA",
-        "Criptografia quântica e o fim da privacidade digital",
-        "A evolução do hardware: Da Ender 3 às impressoras de metal",
-        "A vulnerabilidade de dia zero", "O impacto da Inteligência Artificial", 
-        "A engenharia reversa aplicada", "O vazamento de metadados críticos",
-        "A evolução do hardware e firmware", "O protocolo de criptografia quântica",
-        "A automação de ataques ofensivos", "A análise forense digital",
-        "O monitoramento preditivo de rede", "A exploração de falhas de memória"
-    ]
-
-    print("--- SYSTEM_ROOT INTERFACE ---")
-
-    # LÓGICA DE DECISÃO HÍBRIDA (PC vs GITHUB)
-    # Se houver argumento do sistema (enviado pelo GitHub), usa ele.
-    # Se não houver, e estiver no PC, pede o input.
-    tema_input = ""
+def executar_pipeline():
+    # Captura tema do argumento do sistema (GitHub Action)
+    tema = sys.argv[1] if len(sys.argv) > 1 else "Tecnologia Analitica"
     
-    if len(sys.argv) > 1:
-        tema_input = sys.argv[1] # Recebe do GitHub Action
-    else:
-        # Só pede input se estiver rodando manualmente no PC
-        print("Dica: Aperte ENTER para gerar um tema aleatório.")
-        tema_input = input("Qual o tema do post? ").strip()
-    
-    if not tema_input:
-        tema = random.choice(temas_seeds)
-        print(f"[*] MODO AUTO: Gerando conteúdo sobre: {tema}")
-    else:
-        tema = tema_input
+    print(f"[*] Operando em: {tema}")
 
-    # 1. GERAÇÃO DE TEXTO
-    print("[1/3] Gerando texto com Llama-3 (IA)...")
-    messages = [{"role": "user", "content": f"Escreva um título e um resumo nerd impactante sobre {tema} em Português do Brasil. Seja direto e analítico."}]
-    
+    # 2. GERAÇÃO DE CONTEÚDO (LLAMA-3)
     try:
-        response = client.chat_completion(
-            model="meta-llama/Meta-Llama-3-8B-Instruct", 
-            messages=messages,
-            max_tokens=150
-        )
+        msg = [{"role": "user", "content": f"Título e resumo técnico sobre {tema} em PT-BR. Direto e analítico."}]
+        response = client.chat_completion(model="meta-llama/Meta-Llama-3-8B-Instruct", messages=msg, max_tokens=150)
         resumo_ia = response.choices[0].message.content
     except Exception as e:
-        print(f"Erro na IA de texto: {e}")
-        return
+        print(f"Erro IA: {e}"); return
 
-   # 2. BUSCA DE IMAGEM ÚNICA E ILIMITADA
-    print("[2/3] Capturando asset visual (Protocolo Anti-Bloqueio)...")
-    folder = 'images'
-    if not os.path.exists(folder): os.makedirs(folder)
-
-    nome_arquivo = f"img_{int(time.time())}.jpg"
-    caminho_completo = os.path.join(folder, nome_arquivo)
-
-    try:
-        # TENTATIVA 1: Unsplash com "assinatura" para não repetir
-        query = f"{tema},tech,dark".replace(" ", ",")
-        url = f"https://source.unsplash.com/featured/1600x900?{query}&sig={random.randint(1, 1000)}"
-        
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(url, headers=headers, timeout=10)
-
-        if response.status_code == 200:
-            with open(caminho_completo, 'wb') as f:
-                f.write(response.content)
-            print(f"[*] Imagem temática capturada via Unsplash.")
-        else:
-            raise Exception("Unsplash Rate Limit ou Offline")
-
-    except Exception:
-        # FALLBACK: Picsum Photos (Ilimitado e impossível de cair)
-        print("[!] Unsplash indisponível. Acionando Gerador Aleatório Picsum...")
-        # O ID aleatório garante que a imagem NUNCA se repita
-        id_aleatorio = random.randint(1, 1084) 
-        url_fallback = f"https://picsum.photos/id/{id_aleatorio}/1600/900"
-        
-        res = requests.get(url_fallback, timeout=10)
-        with open(caminho_completo, 'wb') as f:
-            f.write(res.content)
-        print(f"[*] Imagem aleatória capturada via Picsum.")
-            
-    # 3. TRATAMENTO DOS DADOS
-    agora = datetime.now()
-    data_formatada = agora.strftime("%d/%m/%Y às %H:%M")
-    linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
+    # 3. IMAGEM ÚNICA (PICSUM - ACESSO ILIMITADO)
+    # Usamos o ID aleatório para garantir que NUNCA repita a imagem
+    img_id = random.randint(1, 1000)
+    img_name = f"img_{int(time.time())}.jpg"
+    img_path = os.path.join("images", img_name)
     
-    # Validação para evitar erro de índice se a IA responder vazio
-    if not linhas: return
+    if not os.path.exists("images"): os.makedirs("images")
+    
+    try:
+        # Picsum é imbatível para evitar o erro 422 de timeout
+        res_img = requests.get(f"https://picsum.photos/id/{img_id}/1600/900", timeout=15)
+        with open(img_path, "wb") as f:
+            f.write(res_img.content)
+    except:
+        img_name = "default_tech.jpg"
 
-    primeira_linha = linhas[0].replace('**', '').replace('#', '').strip()
-    titulo_final = primeira_linha.split(':', 1)[1].strip() if ":" in primeira_linha else primeira_linha
-    resumo_final = "\n".join(linhas[1:]).replace('**', '').strip() or resumo_ia.replace('**', '').strip()
+    # 4. TRATAMENTO E PERSISTÊNCIA (JSON)
+    linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
+    titulo = linhas[0].replace('**', '').replace('#', '')
+    resumo = " ".join(linhas[1:]).replace('**', '')
 
-    # 4. SALVAMENTO NO JSON
     novo_post = {
         "categoria": "SYSTEM_ROOT",
-        "titulo": titulo_final, 
-        "resumo": resumo_final,
-        "imagem": f"images/{nome_arquivo}",
-        "data_hora": data_formatada,
+        "titulo": titulo,
+        "resumo": resumo,
+        "imagem": f"images/{img_name}",
+        "data_hora": datetime.now().strftime("%d/%m/%Y %H:%M"),
         "autor": "Lucas Mendes",
         "local": "Ceilândia/DF"
     }
 
-    post = []
+    # Sincronia de Banco de Dados
+    posts = []
     if os.path.exists('post.json'):
-        try:
-            with open('post.json', 'r', encoding='utf-8') as f:
-                post = json.load(f)
-        except:
-            post = []
-
-    post.insert(0, novo_post)
-
+        with open('post.json', 'r', encoding='utf-8') as f:
+            try: posts = json.load(f)
+            except: posts = []
+    
+    posts.insert(0, novo_post)
     with open('post.json', 'w', encoding='utf-8') as f:
-        json.dump(post, f, indent=4, ensure_ascii=False)
+        json.dump(posts, f, indent=4, ensure_ascii=False)
 
-    print(f"\n[SUCESSO] Post '{titulo_final}' processado!")
+    print(f"[SUCESSO] Deploy de '{titulo}' pronto.")
 
 if __name__ == "__main__":
-    gerar_e_subir()
+    executar_pipeline()
