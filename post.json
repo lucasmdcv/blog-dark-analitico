@@ -1,6 +1,15 @@
 [
     {
         "categoria": "SYSTEM_ROOT",
+        "titulo": "\"O Fim da Privacidade Digital: A Revolução Quântica que Desvenda os Segredos da Internet\"",
+        "resumo": "Resumo:\nA Criptografia Quântica é uma tecnologia inovadora que promete tornar os sistemas de comunicação mais seguros do que nunca. No entanto, essa alegria pode se tornar um pesadelo para os defensores da privacidade digital. Com a Criptografia Quântica, os algoritmos de criptografia tradicionais podem ser quebrados instantaneamente, desvendando segredos que antes eram inacessíveis. Isso significa que a privac",
+        "imagem": "images/default_tech.jpg",
+        "data_hora": "10/01/2026 às 21:24",
+        "autor": "Lucas Mendes",
+        "local": "Ceilândia/DF"
+    },
+    {
+        "categoria": "SYSTEM_ROOT",
         "titulo": "\"A Verdadeira Ressurgência: Desvendando o Mapa Reinventado de Call of Duty\"",
         "resumo": "Resumo:\nNossa expectativa estava posta em voo alto com a notícia da ressurgência do mapa clássico de Call of Duty. E finalmente, a espera chegou ao fim! O novo mapa trouxe consigo uma combinação única de realismo e inovação, deixando os jogadores mais experientes em choque.\nCom um design renovado e uma engenharia incrível, o mapa oferece um ambiente de batalha mais dinâmico e desafiador do que nunca. A recriação de",
         "imagem": "images/img_1768068603.jpg",
