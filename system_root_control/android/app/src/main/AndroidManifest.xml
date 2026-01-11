@@ -16,7 +16,7 @@
     </queries>
 
     <application 
-        android:label="system_root_control" 
+        android:label="The Machine" 
         android:name="${applicationName}" 
         android:icon="@mipmap/ic_launcher">
 
