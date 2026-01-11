@@ -22,7 +22,9 @@ else
 fi
 
 TEMA=${1:-"Cibersegurança Avançada em 2026"}
-MODEL="meta-llama/Meta-Llama-3-8B-Instruct"
+
+MODEL="meta-llama/Llama-3.1-8B-Instruct
+
 
 echo -e "[*] Alvo: $TEMA"
 echo -e "[1/3] Gerando conteúdo via Router (Gratuito)..."
