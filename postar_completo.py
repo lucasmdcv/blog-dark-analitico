@@ -6,6 +6,13 @@ from datetime import datetime
 from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
 
+
+# Define o caminho direto para evitar o erro de busca automática no Termux
+env_path = os.path.join(os.getcwd(), '.env')
+load_dotenv(dotenv_path=env_path)
+
+
+
 # 1. SETUP DE AMBIENTE
 load_dotenv()
 TOKEN_HF = os.getenv("HF_TOKEN")
