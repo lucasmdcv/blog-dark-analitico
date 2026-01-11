@@ -1,5 +1,5 @@
 #!/bin/bash
-# SYSTEM_ROOT - Deploy Engine v4.0 (Termux Optimized)
+# SYSTEM_ROOT - Deploy Engine v5.0 (Direct API Mode)
 # Estética: Dark/Analítica | Lucas Mendes
 
 CYAN='\033[0;36m'
@@ -12,73 +12,65 @@ echo -e "${CYAN}==========================================${NC}"
 echo -e "${CYAN}      SYSTEM_ROOT // AI DEPLOY ENGINE     ${NC}"
 echo -e "${CYAN}==========================================${NC}"
 
-# 1. Carregamento Manual do .env (Pula o erro do python-dotenv no Termux)
+# 1. Carregamento e Limpeza de Variáveis
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
-    echo -e "${GREEN}[+] Variáveis de ambiente injetadas.${NC}"
+    # O sed remove aspas e espaços extras que podem corromper o Token
+    export HF_TOKEN=$(grep HF_TOKEN .env | cut -d '=' -f2 | sed 's/["'\'']//g' | xargs)
+    echo -e "${GREEN}[+] Token extraído e sanitizado.${NC}"
 else
-    echo -e "${RED}[!] Erro: Arquivo .env não encontrado.${NC}"
+    echo -e "${RED}[!] Erro: Arquivo .env ausente.${NC}"
     exit 1
 fi
 
-# 2. Definição do Tema
 TEMA=${1:-"Cibersegurança Avançada em 2026"}
 
-# 3. Bloco de Execução Python (Core)
+# 2. Execução via Python (Método Direct Generation)
 python3 - << EOF
 import os, json, time, random, sys, requests
 from datetime import datetime
 from huggingface_hub import InferenceClient
 
-def executar_pipeline():
-    # Injeta variáveis exportadas pelo Bash
-    token_hf = os.getenv("HF_TOKEN")
+def executar():
+    token = os.getenv("HF_TOKEN")
     tema = "$TEMA"
     
-    if not token_hf:
-        print("${RED}[!] Erro: HF_TOKEN não detectado no ambiente.${NC}")
-        return
+    # Endpoint direto para evitar o Auto-Router
+    model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+    client = InferenceClient(model=model_id, token=token)
 
-    # Arrocho Técnico: Configuração explícita para evitar erro de auto-router
-    client = InferenceClient(
-        model="meta-llama/Meta-Llama-3-8B-Instruct",
-        token=token_hf
-    )
-
-    prompt_profundo = (
-        f"Aja como um Editor-Chefe de Tecnologia. Escreva uma reportagem de impacto sobre {tema}. "
-        f"ESTRUTURA OBRIGATÓRIA: 1. TÍTULO urgente (estilo G1), 2. LEAD direto, "
-        f"3. ANÁLISE TÉCNICA densa e 4. CONCLUSÃO 2026."
+    prompt = (
+        f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n"
+        f"Aja como um Editor-Chefe de Tecnologia. Escreva uma reportagem urgente sobre {tema}. "
+        f"ESTRUTURA: 1. TÍTULO estilo G1, 2. LEAD direto, 3. ANÁLISE TÉCNICA densa, 4. CONCLUSÃO 2026. "
+        f"Responda apenas com o texto da reportagem.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
     )
 
     try:
-        print(f"[*] Operando em: {tema}")
-        print("[1/3] Gerando reportagem profunda com Llama-3...")
+        print(f"[*] Alvo: {tema}")
+        print("[1/3] Gerando reportagem (Direct API)...")
         
-        # Uso do chat_completion com parâmetros diretos
-        response = client.chat_completion(
-            messages=[{"role": "user", "content": prompt_profundo}],
-            max_tokens=2000,
-            temperature=0.7
+        # Uso do text_generation para bypassar o erro de roteamento
+        resumo_ia = client.text_generation(
+            prompt,
+            max_new_tokens=1500,
+            temperature=0.7,
+            stop_sequences=["<|eot_id|>"]
         )
-        resumo_ia = response.choices[0].message.content
 
-        # Processamento Visual
+        # Captura de Imagem
         img_id = random.randint(1, 1000)
         img_name = f"img_{int(time.time())}.jpg"
         if not os.path.exists("images"): os.makedirs("images")
         
-        print("[2/3] Capturando asset visual...")
-        res_img = requests.get(f"https://picsum.photos/id/{img_id}/1600/900", timeout=15)
+        print("[2/3] Sincronizando assets visuais...")
+        res_img = requests.get(f"https://picsum.photos/id/{img_id}/1600/900", timeout=10)
         with open(f"images/{img_name}", "wb") as f:
             f.write(res_img.content)
 
-        # Parsing e Tratamento do Texto
+        # Parsing JSON
         linhas = [l.strip() for l in resumo_ia.split('\n') if l.strip()]
-        if not linhas: return
-
-        titulo = linhas[0].replace('**', '').replace('#', '').strip()
-        corpo = "\n\n".join(linhas[1:]).replace('**', '').strip()
+        titulo = linhas[0].replace('#', '').replace('*', '').strip()
+        corpo = "\n\n".join(linhas[1:]).replace('*', '').strip()
 
         novo_post = {
             "categoria": "SYSTEM_ROOT",
@@ -90,7 +82,6 @@ def executar_pipeline():
             "local": "Ceilândia/DF"
         }
 
-        # Sincronia JSON
         posts = []
         if os.path.exists('post.json'):
             with open('post.json', 'r', encoding='utf-8') as f:
@@ -101,13 +92,13 @@ def executar_pipeline():
         with open('post.json', 'w', encoding='utf-8') as f:
             json.dump(posts, f, indent=4, ensure_ascii=False)
 
-        print(f"\n${GREEN}[SUCESSO] Deploy de '{titulo}' concluído.${NC}")
+        print(f"\n${GREEN}[SUCCESS] Deploy: {titulo}${NC}")
 
     except Exception as e:
-        print(f"${RED}[!] Falha Crítica: {e}${NC}")
+        print(f"${RED}[!] Erro Crítico: {e}${NC}")
 
-executar_pipeline()
+executar()
 EOF
 
 echo -e "${CYAN}==========================================${NC}"
-echo -e "Status: https://blog-dark-analitico.netlify.app/"
+
