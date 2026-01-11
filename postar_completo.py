@@ -65,34 +65,41 @@ def gerar_e_subir():
         print(f"Erro na IA de texto: {e}")
         return
 
-   # 2. BUSCA DE IMAGEM ESTÁVEL (UNSPLASH - SEM COTA IA)
-    print("[2/3] Capturando asset visual estável via Unsplash...")
+   # 2. BUSCA DE IMAGEM ÚNICA E ILIMITADA
+    print("[2/3] Capturando asset visual (Protocolo Anti-Bloqueio)...")
     folder = 'images'
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+    if not os.path.exists(folder): os.makedirs(folder)
+
+    nome_arquivo = f"img_{int(time.time())}.jpg"
+    caminho_completo = os.path.join(folder, nome_arquivo)
 
     try:
-        # Busca imagens baseadas no tema para manter sua estética Dark/Analítica
-        query = f"{tema},technology,dark,hacker".replace(" ", ",")
-        url_unsplash = f"https://source.unsplash.com/featured/1600x900?{query}"
+        # TENTATIVA 1: Unsplash com "assinatura" para não repetir
+        query = f"{tema},tech,dark".replace(" ", ",")
+        url = f"https://source.unsplash.com/featured/1600x900?{query}&sig={random.randint(1, 1000)}"
         
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        response_img = requests.get(url_unsplash, headers=headers, timeout=15)
-        
-        if response_img.status_code == 200:
-            nome_arquivo = f"img_{int(time.time())}.jpg"
-            caminho_completo = os.path.join(folder, nome_arquivo)
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(url, headers=headers, timeout=10)
+
+        if response.status_code == 200:
             with open(caminho_completo, 'wb') as f:
-                f.write(response_img.content)
-            print(f"[*] Imagem capturada com sucesso: {nome_arquivo}")
+                f.write(response.content)
+            print(f"[*] Imagem temática capturada via Unsplash.")
         else:
-            raise Exception(f"Erro Unsplash: Status {response_img.status_code}")
-            
-    except Exception as e:
-        print(f"Erro no pipeline de imagem (Usando Fallback): {e}")
-        # Se tudo falhar, define um nome mas não trava o script
-        nome_arquivo = "default_tech.jpg"
+            raise Exception("Unsplash Rate Limit ou Offline")
+
+    except Exception:
+        # FALLBACK: Picsum Photos (Ilimitado e impossível de cair)
+        print("[!] Unsplash indisponível. Acionando Gerador Aleatório Picsum...")
+        # O ID aleatório garante que a imagem NUNCA se repita
+        id_aleatorio = random.randint(1, 1084) 
+        url_fallback = f"https://picsum.photos/id/{id_aleatorio}/1600/900"
         
+        res = requests.get(url_fallback, timeout=10)
+        with open(caminho_completo, 'wb') as f:
+            f.write(res.content)
+        print(f"[*] Imagem aleatória capturada via Picsum.")
+            
     # 3. TRATAMENTO DOS DADOS
     agora = datetime.now()
     data_formatada = agora.strftime("%d/%m/%Y às %H:%M")

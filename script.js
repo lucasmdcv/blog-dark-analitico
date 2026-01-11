@@ -38,8 +38,8 @@ function renderizarPosts(posts) {
     posts.forEach(post => {
         const card = `
             <div class="card bg-black border-secondary mb-4 overflow-hidden animate-in">
-                <img src="${post.imagem}" class="card-img-top grayscale" alt="Análise Visual" 
-                     onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'">
+                <// No seu script.js
+<img src="${post.imagem}" onerror="this.src='images/default_tech.jpg'">
                 <div class="card-body border-top border-secondary">
                     <div class="d-flex justify-content-between mb-2">
                         <span class="badge border border-danger text-danger">${post.categoria}</span>
