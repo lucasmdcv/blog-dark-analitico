@@ -1,0 +1,38 @@
+name: SYSTEM_ROOT_DEPLOY
+
+on:
+  workflow_dispatch:
+    inputs:
+      tema:
+        description: 'Tema do post enviado pelo Flutter'
+        required: true
+        default: 'Tecnologia'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: |
+          pip install requests huggingface_hub python-dotenv
+
+      - name: Executar Script IA
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python postar_completo.py "${{ github.event.inputs.tema }}"
+
+      - name: Sincronizar Mudanças (Git Push)
+        run: |
+          git config --global user.name "Lucas Mendes (Automation)"
+          git config --global user.email "lucas@systemroot.com"
+          git add post.json images/
+          git commit -m "SYSTEM_ROOT: Novo post via script automatizado" || echo "Sem mudanças"
+          git push
